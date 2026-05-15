@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zamonaviy Uy Loyihalari</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background-animation">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- HEADER -->
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-house-chimney-window"></i> DreamHouse
+            </div>
+            <button id="home-btn" class="icon-btn hidden"><i class="fa-solid fa-house"></i> Bosh sahifa</button>
+        </header>
+
+        <main id="main-content">
+            <!-- STEP 1: LANDING -->
+            <section id="step-landing" class="step active">
+                <div class="hero-text">
+                    <h1>Orzuingizdagi uyni <span class="gradient-text">loyihalang</span></h1>
+                    <p>Eng ilg'or dizaynlar bilan uyingiz tuzilishi va xona ranglarini o'zingiz moslashtiring.</p>
+                </div>
+                <div class="cards-container">
+                    <div class="glass-card option-card" data-action="structure">
+                        <div class="card-icon"><i class="fa-solid fa-pen-ruler"></i></div>
+                        <h2>Uy Tuzilishi</h2>
+                        <p>Uyingizning kvadrat metri va xonalar sonini tanlab eng zo'r loyihalarni ko'ring.</p>
+                        <div class="card-btn">Boshlash <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+                    <div class="glass-card option-card" data-action="colors">
+                        <div class="card-icon"><i class="fa-solid fa-palette"></i></div>
+                        <h2>Xonalarni Ko'rish</h2>
+                        <p>Xonalar uchun ranglarni o'zingiz tanlang va real interyerda qanday turishini ko'ring.</p>
+                        <div class="card-btn">Boshlash <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 2: AREA SELECTION -->
+            <section id="step-area" class="step hidden">
+                <h2>Uyingiz maydonini tanlang</h2>
+                <p class="subtitle">16 kv.m dan 100 kv.m gacha bo'lgan o'lchamlardan birini tanlang</p>
+                <div class="grid-buttons scrollable" id="area-buttons">
+                    <!-- JS orqali to'ldiriladi -->
+                </div>
+            </section>
+
+            <!-- STEP 3: ROOMS SELECTION -->
+            <section id="step-rooms" class="step hidden">
+                <h2 id="rooms-title">Nechta xona bo'lishini xohlaysiz?</h2>
+                <p class="subtitle">Tanlangan maydon uchun mos xonalar sonini belgilang</p>
+                <div class="grid-buttons center-grid" id="room-buttons">
+                    <!-- JS orqali to'ldiriladi (2,3,4,5,6,7) -->
+                </div>
+                <button class="back-btn" onclick="goBack('step-area')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+            </section>
+
+            <!-- STEP 4: COLOR SELECTION -->
+            <section id="step-colors" class="step hidden">
+                <h2>Xonalar uchun rang tanlang</h2>
+                <p class="subtitle">O'zingizga yoqqan 3 ta rangni tanlang (<span id="color-count">0</span>/3)</p>
+                <div class="colors-grid" id="colors-container">
+                    <!-- JS orqali to'ldiriladi -->
+                </div>
+                <div class="action-buttons">
+                    <button class="back-btn" onclick="goBack('step-landing')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+                    <button id="generate-colors-btn" class="primary-btn disabled" disabled>Natijalarni ko'rish <i class="fa-solid fa-magic"></i></button>
+                </div>
+            </section>
+
+            <!-- STEP 5: RESULTS -->
+            <section id="step-results" class="step hidden">
+                <h2 id="results-title">Siz uchun tayyorlangan loyihalar</h2>
+                <p class="subtitle" id="results-subtitle">Natijalar yuklanmoqda...</p>
+                
+                <div class="loader-container" id="results-loader">
+                    <div class="spinner"></div>
+                    <p>Sun'iy intellekt loyihalarni tayyorlamoqda...</p>
+                </div>
+
+                <div class="results-grid hidden" id="results-gallery">
+                    <!-- Rasmlar shu yerga tushadi -->
+                </div>
+                <div style="text-align: center; margin-top: 2rem;">
+                     <button class="primary-btn" onclick="restartApp()"><i class="fa-solid fa-rotate-right"></i> Yangidan boshlash</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Rasm modal -->
+    <div id="image-modal" class="modal hidden">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="modal-caption"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
