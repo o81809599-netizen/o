@@ -23,16 +23,16 @@ const colorsPalette = [
 ];
 
 const houseImages = [
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600607687931-570a59b925b6?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=800&q=80"
+    "images/media__1778853766759.png",
+    "images/media__1778853791496.png",
+    "images/floor_plan_3d_2_1778855438613.png",
+    "images/floor_plan_3d_3_1778855647178.png",
+    "images/floor_plan_3d_4_1778855704907.png",
+    "images/media__1778853766759.png",
+    "images/media__1778853791496.png",
+    "images/floor_plan_3d_2_1778855438613.png",
+    "images/floor_plan_3d_3_1778855647178.png",
+    "images/floor_plan_3d_4_1778855704907.png"
 ];
 
 const roomImages = [
@@ -247,11 +247,23 @@ function renderImages(type) {
     // Suffle array roughly for uniqueness effect on multiple plays
     const shuffled = [...sourceImages].sort(() => 0.5 - Math.random());
     
+    let infoText = "";
+    if(type === 'structure') {
+        infoText = `${state.area} kv.m, ${state.rooms} xona`;
+    } else {
+        const selectedColorNames = state.selectedColors.map(hex => {
+            const c = colorsPalette.find(item => item.hex === hex);
+            return c ? c.name.split(' / ')[0] : hex;
+        }).join(', ');
+        infoText = `Ranglar: ${selectedColorNames}`;
+    }
+    
     gallery.innerHTML = shuffled.slice(0, 10).map((img, i) => `
-        <div class="result-card" onclick="openModal('${img}', '${type === 'structure' ? `Loyiha #${i+1} (${state.area}kv, ${state.rooms} xona)` : `Interyer #${i+1}`}')">
+        <div class="result-card" onclick="openModal('${img}', '${type === 'structure' ? `Loyiha #${i+1} (${infoText})` : `Interyer #${i+1} (${infoText})`}')">
             <img src="${img}" alt="Design ${i+1}" loading="lazy">
             <div class="result-info">
                 <h3>${type === 'structure' ? 'Loyiha' : 'Interyer'} #${i+1}</h3>
+                <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 4px;">${infoText}</p>
             </div>
         </div>
     `).join('');
