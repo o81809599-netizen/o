@@ -10,9 +10,11 @@
 </head>
 <body>
     <div class="background-animation">
+        <div class="stars"></div>
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
         <div class="blob blob-3"></div>
+        <div class="blob blob-4"></div>
     </div>
 
     <div class="app-container">
@@ -31,17 +33,11 @@
                     <h1>Orzuingizdagi uyni <span class="gradient-text">loyihalang</span></h1>
                     <p>Eng ilg'or dizaynlar bilan uyingiz tuzilishi va xona ranglarini o'zingiz moslashtiring.</p>
                 </div>
-                <div class="cards-container">
-                    <div class="glass-card option-card" data-action="structure">
-                        <div class="card-icon"><i class="fa-solid fa-pen-ruler"></i></div>
-                        <h2>Uy Tuzilishi</h2>
-                        <p>Uyingizning kvadrat metri va xonalar sonini tanlab eng zo'r loyihalarni ko'ring.</p>
-                        <div class="card-btn">Boshlash <i class="fa-solid fa-arrow-right"></i></div>
-                    </div>
-                    <div class="glass-card option-card" data-action="colors">
-                        <div class="card-icon"><i class="fa-solid fa-palette"></i></div>
-                        <h2>Xonalarni Ko'rish</h2>
-                        <p>Xonalar uchun ranglarni o'zingiz tanlang va real interyerda qanday turishini ko'ring.</p>
+                <div class="cards-container single-center">
+                    <div class="glass-card option-card main-start-card" onclick="startUnifiedFlow()">
+                        <div class="card-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                        <h2>Loyihani Boshlash</h2>
+                        <p>Kvadrat metr, xonalar soni va yoqtirgan ranglaringizni tanlang. Biz sizga mos keluvchi mukammal dizaynlarni topamiz!</p>
                         <div class="card-btn">Boshlash <i class="fa-solid fa-arrow-right"></i></div>
                     </div>
                 </div>
@@ -74,8 +70,8 @@
                     <!-- JS orqali to'ldiriladi -->
                 </div>
                 <div class="action-buttons">
-                    <button class="back-btn" onclick="goBack('step-landing')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
-                    <button id="generate-colors-btn" class="primary-btn disabled" disabled>Natijalarni ko'rish <i class="fa-solid fa-magic"></i></button>
+                    <button class="back-btn" onclick="goBack('step-rooms')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+                    <button id="generate-colors-btn" class="primary-btn disabled" disabled>Loyihalarni ko'rish <i class="fa-solid fa-magic"></i></button>
                 </div>
             </section>
 
@@ -89,7 +85,7 @@
                     <p>Sun'iy intellekt loyihalarni tayyorlamoqda...</p>
                 </div>
 
-                <div class="results-grid hidden" id="results-gallery">
+                <div class="results-list hidden" id="results-gallery">
                     <!-- Rasmlar shu yerga tushadi -->
                 </div>
                 <div style="text-align: center; margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
@@ -100,11 +96,15 @@
         </main>
     </div>
 
-    <!-- Rasm modal -->
+    <!-- Modal for viewing full details -->
     <div id="image-modal" class="modal hidden">
-        <span class="close-modal">&times;</span>
-        <img class="modal-content" id="modal-img">
-        <div id="modal-caption"></div>
+        <div class="modal-content-container">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modal-caption" style="color: white; margin-bottom: 20px; text-align: left; font-size: 2rem;">Loyiha tafsilotlari</h2>
+            <div id="modal-gallery" class="modal-gallery">
+                <!-- Inner images will be injected here -->
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

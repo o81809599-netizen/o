@@ -1,6 +1,5 @@
 // State
 let state = {
-    mode: null, // 'structure' or 'colors'
     area: null,
     rooms: null,
     selectedColors: [],
@@ -23,50 +22,42 @@ const colorsPalette = [
     { name: 'Binafsha / Purple', hex: '#8B5CF6' }
 ];
 
+// Base structure images
 const houseImages = [
-    "images/media__1778853766759.png",
-    "images/media__1778853791496.png",
-    "images/floor_plan_3d_2_1778855438613.png",
-    "images/floor_plan_3d_3_1778855647178.png",
-    "images/floor_plan_3d_4_1778855704907.png",
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1588854337236-6889d631faa8?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1541888046420-58133cb66fb0?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1523628469855-6677f48f4e24?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1503951458645-6431524e930f?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1521255530188-f5eef14ec2aa?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1621619856624-42fd193a0661?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34e?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1498625515233-a3d132646c24?auto=format&fit=crop&w=800&q=80",
-    "images/media__1778853766759.png",
-    "images/media__1778853791496.png",
-    "images/floor_plan_3d_2_1778855438613.png",
-    "images/floor_plan_3d_3_1778855647178.png",
-    "images/floor_plan_3d_4_1778855704907.png"
+    "images/media__1778853766759.png", "images/media__1778853791496.png",
+    "images/floor_plan_3d_2_1778855438613.png", "images/floor_plan_3d_3_1778855647178.png",
+    "images/floor_plan_3d_4_1778855704907.png", "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1588854337236-6889d631faa8?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1541888046420-58133cb66fb0?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1523628469855-6677f48f4e24?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1503951458645-6431524e930f?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1521255530188-f5eef14ec2aa?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1621619856624-42fd193a0661?auto=format&fit=crop&w=800&q=80", "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34e?auto=format&fit=crop&w=800&q=80",
+    "https://images.unsplash.com/photo-1498625515233-a3d132646c24?auto=format&fit=crop&w=800&q=80", "images/media__1778853766759.png",
+    "images/media__1778853791496.png", "images/floor_plan_3d_2_1778855438613.png",
+    "images/floor_plan_3d_3_1778855647178.png", "images/floor_plan_3d_4_1778855704907.png"
 ];
 
-const roomImages = [
-    "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1556910103-1c02745a8e4e?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1583847268964-b28ce8f31586?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1615874959474-d609969a24d5?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1598928506311-c55dd1b48b61?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1532323544230-7191fd51bc1b?auto=format&fit=crop&w=800&q=80"
+// Room images with color tags
+const roomImagesTagged = [
+    { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80", tags: ['#FFFFFF', '#9CA3AF'] }, // White/Gray
+    { url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80", tags: ['#F5F5DC', '#8B4513'] }, // Beige/Brown
+    { url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?auto=format&fit=crop&w=800&q=80", tags: ['#FFFFFF', '#1F2937'] }, // White/Black
+    { url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80", tags: ['#FFFFFF', '#3B82F6'] }, // White/Blue
+    { url: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80", tags: ['#1F2937', '#9CA3AF'] }, // Black/Gray
+    { url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=800&q=80", tags: ['#FFFFFF', '#10B981'] }, // White/Green
+    { url: "https://images.unsplash.com/photo-1556910103-1c02745a8e4e?auto=format&fit=crop&w=800&q=80", tags: ['#F5F5DC', '#FBBF24'] }, // Beige/Yellow
+    { url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80", tags: ['#1E3A8A', '#FFFFFF'] }, // Navy/White
+    { url: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?auto=format&fit=crop&w=800&q=80", tags: ['#8B4513', '#9CA3AF'] }, // Brown/Gray
+    { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80", tags: ['#EF4444', '#FFFFFF'] }, // Red/White
+    { url: "https://images.unsplash.com/photo-1583847268964-b28ce8f31586?auto=format&fit=crop&w=800&q=80", tags: ['#8B5CF6', '#FFFFFF'] }, // Purple/White
+    { url: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80", tags: ['#A7F3D0', '#FFFFFF'] }, // Mint/White
+    { url: "https://images.unsplash.com/photo-1615874959474-d609969a24d5?auto=format&fit=crop&w=800&q=80", tags: ['#F5F5DC', '#1F2937'] }, // Beige/Black
+    { url: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&w=800&q=80", tags: ['#3B82F6', '#FBBF24'] }, // Blue/Yellow
+    { url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=800&q=80", tags: ['#10B981', '#8B4513'] }, // Green/Brown
+    { url: "https://images.unsplash.com/photo-1598928506311-c55dd1b48b61?auto=format&fit=crop&w=800&q=80", tags: ['#EF4444', '#1F2937'] }, // Red/Black
+    { url: "https://images.unsplash.com/photo-1593696140826-c58b021acf8b?auto=format&fit=crop&w=800&q=80", tags: ['#1E3A8A', '#FBBF24'] }, // Navy/Yellow
+    { url: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?auto=format&fit=crop&w=800&q=80", tags: ['#8B5CF6', '#9CA3AF'] }, // Purple/Gray
+    { url: "https://images.unsplash.com/photo-1505693314120-0d443867891c?auto=format&fit=crop&w=800&q=80", tags: ['#A7F3D0', '#3B82F6'] }, // Mint/Blue
+    { url: "https://images.unsplash.com/photo-1532323544230-7191fd51bc1b?auto=format&fit=crop&w=800&q=80", tags: ['#FFFFFF', '#FFFFFF'] }  // Pure white
 ];
 
 // DOM Elements
@@ -84,20 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initRoomButtons();
     initColorButtons();
     
-    // Landing Cards Clicks
-    document.querySelectorAll('.option-card').forEach(card => {
-        card.addEventListener('click', () => {
-            state.mode = card.dataset.action;
-            if(state.mode === 'structure') {
-                showStep('step-area');
-            } else {
-                showStep('step-colors');
-            }
-        });
-    });
-
     homeBtn.addEventListener('click', restartApp);
-    generateColorsBtn.addEventListener('click', () => showResults('colors'));
+    generateColorsBtn.addEventListener('click', () => showResults('unified'));
     
     // Modal events
     document.querySelector('.close-modal').addEventListener('click', closeModal);
@@ -131,8 +110,12 @@ function goBack(stepId) {
     showStep(stepId);
 }
 
+function startUnifiedFlow() {
+    showStep('step-area');
+}
+
 function restartApp() {
-    state = { mode: null, area: null, rooms: null, selectedColors: [], currentBatch: 0 };
+    state = { area: null, rooms: null, selectedColors: [], currentBatch: 0 };
     
     // Reset selections
     document.querySelectorAll('.select-btn').forEach(btn => btn.classList.remove('selected'));
@@ -186,7 +169,7 @@ function selectRooms(val) {
     });
 
     setTimeout(() => {
-        showResults('structure');
+        showStep('step-colors');
     }, 300);
 }
 
@@ -248,76 +231,60 @@ function showResults(type) {
     gallery.classList.add('hidden');
     state.currentBatch = 0; // reset batch
 
-    if(type === 'structure') {
-        title.textContent = `${state.area} kv.m maydondagi ${state.rooms} xonali loyihalar`;
-        subtitle.textContent = "Siz uchun maxsus tanlangan 20 ta loyiha";
-        
-        // "kv ga moslab chiqargin": Use area as a seed or deterministic sort
-        // This ensures a 30kv home looks different from a 100kv home's results
-        currentImagesList = [...houseImages].sort((a, b) => {
-            let hashA = (a.length * state.area) % 100;
-            let hashB = (b.length * state.area) % 100;
-            return hashA - hashB;
-        });
-        
-    } else {
-        title.textContent = "Tanlangan ranglardagi xona interyerlari";
-        subtitle.textContent = "Siz tanlagan ranglarga moslangan 20 xil dizayn";
-        
-        // Color hash sort
-        let colorHash = state.selectedColors.join('').length;
-        currentImagesList = [...roomImages].sort((a, b) => {
-            let hashA = (a.length * colorHash) % 100;
-            let hashB = (b.length * colorHash) % 100;
-            return hashA - hashB;
-        });
-    }
+    title.textContent = `Siz uchun mukammal loyihalar`;
+    subtitle.textContent = `${state.area} kv.m, ${state.rooms} xonali, siz tanlagan ranglardagi dizaynlar`;
+    
+    // Sort base structures
+    currentImagesList = [...houseImages].sort((a, b) => {
+        let hashA = (a.length * state.area * state.rooms) % 100;
+        let hashB = (b.length * state.area * state.rooms) % 100;
+        return hashA - hashB;
+    });
 
     // Simulate API Call
     setTimeout(() => {
         loader.classList.add('hidden');
         gallery.classList.remove('hidden');
-        renderImages(type);
+        renderImages();
     }, 1500);
 }
 
 function nextBatch() {
     state.currentBatch++;
-    // Kichik vizual effekt
     const gallery = document.getElementById('results-gallery');
     gallery.style.opacity = 0;
     setTimeout(() => {
-        renderImages(state.mode);
+        renderImages();
         gallery.style.opacity = 1;
     }, 300);
 }
 
-function renderImages(type) {
+function renderImages() {
     const gallery = document.getElementById('results-gallery');
     
-    // Batching logic: 10 images per batch, loop around if needed
     const totalBatches = Math.ceil(currentImagesList.length / 10);
     const batchIdx = state.currentBatch % totalBatches;
     const startIdx = batchIdx * 10;
     const imagesToShow = currentImagesList.slice(startIdx, startIdx + 10);
     
-    let infoText = "";
-    if(type === 'structure') {
-        infoText = `${state.area} kv.m, ${state.rooms} xona`;
-    } else {
-        const selectedColorNames = state.selectedColors.map(hex => {
-            const c = colorsPalette.find(item => item.hex === hex);
-            return c ? c.name.split(' / ')[0] : hex;
-        }).join(', ');
-        infoText = `Ranglar: ${selectedColorNames}`;
-    }
+    const selectedColorNames = state.selectedColors.map(hex => {
+        const c = colorsPalette.find(item => item.hex === hex);
+        return c ? c.name.split(' / ')[0] : hex;
+    }).join(', ');
+
+    // Generate room names based on count
+    const roomNamesArr = ['Yotoqxona', 'Mehmonxona', 'Oshxona', 'Dush', 'Dahliz', 'Bolalar xonasi', 'Balkon'];
+    const selectedRooms = roomNamesArr.slice(0, state.rooms).join(', ');
     
     gallery.innerHTML = imagesToShow.map((img, i) => `
-        <div class="result-card" onclick="openModal('${img}', '${type === 'structure' ? `Loyiha #${startIdx + i + 1} (${infoText})` : `Interyer #${startIdx + i + 1} (${infoText})`}')">
+        <div class="result-card" onclick="openModal('${img}', ${startIdx + i + 1})">
             <img src="${img}" alt="Design ${startIdx + i + 1}" loading="lazy">
             <div class="result-info">
-                <h3>${type === 'structure' ? 'Loyiha' : 'Interyer'} #${startIdx + i + 1}</h3>
-                <p style="font-size: 0.85rem; opacity: 0.9; margin-top: 4px;">${infoText}</p>
+                <h3>Loyiha #${startIdx + i + 1}</h3>
+                <p><strong>Maydoni:</strong> ${state.area} kv.m</p>
+                <p><strong>Xonalar (${state.rooms}):</strong> ${selectedRooms}</p>
+                <p><strong>Ranglar:</strong> ${selectedColorNames}</p>
+                <p style="margin-top: 1rem; color: var(--primary); font-weight: bold;"><i class="fa-solid fa-eye"></i> Xonalarni ko'rish</p>
             </div>
         </div>
     `).join('');
@@ -325,13 +292,30 @@ function renderImages(type) {
 
 // Modal Functions
 const modal = document.getElementById('image-modal');
-const modalImg = document.getElementById('modal-img');
+const modalGallery = document.getElementById('modal-gallery');
 const captionText = document.getElementById('modal-caption');
 
-function openModal(src, caption) {
+function openModal(src, id) {
     modal.classList.remove('hidden');
-    modalImg.src = src;
-    captionText.innerHTML = caption;
+    captionText.innerHTML = `Loyiha #${id} - Ichki Xonalar`;
+    
+    // Filter room images by selected colors
+    // We want to find images that contain AT LEAST ONE of the user's selected colors in their tags
+    let matchedRooms = roomImagesTagged.filter(room => {
+        return room.tags.some(tag => state.selectedColors.includes(tag));
+    });
+    
+    // If no exact matches, just show a random selection to gracefully degrade
+    if(matchedRooms.length === 0) {
+        matchedRooms = [...roomImagesTagged].sort(() => 0.5 - Math.random());
+    }
+    
+    // Show up to matching number of rooms
+    const displayRooms = matchedRooms.slice(0, state.rooms);
+    
+    modalGallery.innerHTML = displayRooms.map(room => `
+        <img src="${room.url}" alt="Interior Room" loading="lazy">
+    `).join('');
 }
 
 function closeModal() {
