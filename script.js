@@ -258,10 +258,25 @@ function showResults(type) {
     title.textContent = `Siz uchun mukammal 100 ta loyiha`;
     subtitle.textContent = `${state.area} kv.m, ${state.rooms} xonali, siz tanlagan ranglardagi dizaynlar`;
     
-    // Sort base structures deterministically up to 100
-    currentImagesList = [...houseImages].sort((a, b) => {
-        let hashA = (a.length * state.area * state.rooms) % 100;
-        let hashB = (b.length * state.area * state.rooms) % 100;
+    // Categorize and filter images based on Area (KV)
+    // Small (16-40), Medium (45-75), Large (80-100)
+    let categoryRange = { start: 0, end: 33 }; // Default Small
+    if (state.area > 40 && state.area <= 75) {
+        categoryRange = { start: 34, end: 66 };
+    } else if (state.area > 75) {
+        categoryRange = { start: 67, end: 99 };
+    }
+
+    // Pick images from the specific category and shuffle them using Rooms as a seed
+    let pool = houseImages.slice(categoryRange.start, categoryRange.end + 1);
+    
+    // If pool is small, fill it up with other images but keep them at the end
+    let otherImages = houseImages.filter((_, idx) => idx < categoryRange.start || idx > categoryRange.end);
+    
+    currentImagesList = [...pool, ...otherImages].sort((a, b) => {
+        // More complex hash to ensure diversity
+        let hashA = (a.length + (a.indexOf('idx=') * state.rooms)) % 50;
+        let hashB = (b.length + (b.indexOf('idx=') * state.rooms)) % 50;
         return hashA - hashB;
     });
 
