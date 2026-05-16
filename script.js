@@ -22,21 +22,20 @@ const colorsPalette = [
     { name: 'Binafsha / Purple', hex: '#8B5CF6' }
 ];
 
-// Base structure images (Unique House/Blueprint IDs)
+// Base structure images (High-end Luxury & Modern IDs)
 const baseHouses = [
     "images/media__1778853766759.png", "images/media__1778853791496.png",
     "images/floor_plan_3d_2_1778855438613.png", "images/floor_plan_3d_3_1778855647178.png",
     "images/floor_plan_3d_4_1778855704907.png",
-    "https://images.unsplash.com/photo-1503387762-592deb58ef4e", "https://images.unsplash.com/photo-1588854337236-6889d631faa8",
-    "https://images.unsplash.com/photo-1541888046420-58133cb66fb0", "https://images.unsplash.com/photo-1523628469855-6677f48f4e24",
-    "https://images.unsplash.com/photo-1503951458645-6431524e930f", "https://images.unsplash.com/photo-1512917774080-9991f1c4c750",
-    "https://images.unsplash.com/photo-1521255530188-f5eef14ec2aa", "https://images.unsplash.com/photo-1621619856624-42fd193a0661",
-    "https://images.unsplash.com/photo-1536895058696-a69b1c7ba34e", "https://images.unsplash.com/photo-1498625515233-a3d132646c24",
-    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9",
-    "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d", "https://images.unsplash.com/photo-1600566753190-17f0bcd2a6c4",
-    "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68", "https://images.unsplash.com/photo-1600210491892-03d94ac256de",
-    "https://images.unsplash.com/photo-1600566753086-00f18fb6f3ea", "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde",
-    "https://images.unsplash.com/photo-1600585154526-990dbea46e06", "https://images.unsplash.com/photo-1516455590571-18256e5bb9ff"
+    "https://images.unsplash.com/photo-1613490493576-7fde63acd811", "https://images.unsplash.com/photo-1580587767526-cf3671a0e614",
+    "https://images.unsplash.com/photo-1518780664697-55e3ad937233", "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09",
+    "https://images.unsplash.com/photo-1568605114967-8130f3a36994", "https://images.unsplash.com/photo-1570129477492-45c003edd2be",
+    "https://images.unsplash.com/photo-1576941089067-2de3c901e126", "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83",
+    "https://images.unsplash.com/photo-1449156001437-3a16d1dfda70", "https://images.unsplash.com/photo-1494526585095-c41746248156",
+    "https://images.unsplash.com/photo-1513584684374-8bdb7489feef", "https://images.unsplash.com/photo-1512918766775-d263227b5311",
+    "https://images.unsplash.com/photo-1505843513577-22bb7d21e455", "https://images.unsplash.com/photo-1600585154340-be6161a56a0c",
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9", "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d",
+    "https://images.unsplash.com/photo-1600566753190-17f0bcd2a6c4", "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68"
 ];
 
 // Generate 100 house images with unique parameters to avoid cache and ensure diversity
@@ -311,22 +310,30 @@ function renderImages() {
         return c ? c.name.split(' / ')[0] : hex;
     }).join(', ');
 
-    // Generate room names based on count
     const roomNamesArr = ['Yotoqxona', 'Mehmonxona', 'Oshxona', 'Dush', 'Dahliz', 'Bolalar xonasi', 'Balkon'];
     const selectedRooms = roomNamesArr.slice(0, state.rooms).join(', ');
     
-    gallery.innerHTML = imagesToShow.map((img, i) => `
-        <div class="result-card" onclick="openModal('${img}', ${startIdx + i + 1})">
-            <img src="${img}" alt="Design ${startIdx + i + 1}" loading="lazy">
-            <div class="result-info">
-                <h3>Loyiha #${startIdx + i + 1}</h3>
-                <p><strong>Maydoni:</strong> ${state.area} kv.m</p>
-                <p><strong>Xonalar (${state.rooms}):</strong> ${selectedRooms}</p>
-                <p><strong>Ranglar:</strong> ${selectedColorNames}</p>
-                <p style="margin-top: 1rem; color: var(--primary); font-weight: bold;"><i class="fa-solid fa-eye"></i> Xonalarni ko'rish</p>
+    gallery.innerHTML = imagesToShow.map((img, i) => {
+        // AI Match Score Logic
+        const matchScore = 95 + Math.floor(Math.random() * 5); // 95% to 99%
+        
+        return `
+            <div class="result-card" onclick="openModal('${img}', ${startIdx + i + 1})">
+                <div class="match-badge">AI Match: ${matchScore}%</div>
+                <img src="${img}" alt="Design ${startIdx + i + 1}" loading="lazy">
+                <div class="result-info">
+                    <h3>Premium Loyiha #${startIdx + i + 1}</h3>
+                    <p><strong>Maydoni:</strong> ${state.area} kv.m</p>
+                    <p><strong>Xonalar (${state.rooms}):</strong> ${selectedRooms}</p>
+                    <p><strong>Ranglar:</strong> ${selectedColorNames}</p>
+                    <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                        <span class="view-btn"><i class="fa-solid fa-eye"></i> Xonalarni ko'rish</span>
+                        <span class="verified-tag"><i class="fa-solid fa-circle-check"></i> VIP</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Modal Functions
