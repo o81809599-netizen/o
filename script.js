@@ -46,42 +46,43 @@ for(let i=0; i<100; i++) {
     houseImages.push(`${base}${sep}auto=format&fit=crop&w=800&q=80&idx=${i}`);
 }
 
-// Base Room images with color tags
-const baseRoomsTagged = [
-    { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7", tags: ['#FFFFFF', '#9CA3AF', '#F5F5DC'] }, 
-    { url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0", tags: ['#F5F5DC', '#8B4513', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6", tags: ['#FFFFFF', '#1F2937', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267", tags: ['#FFFFFF', '#3B82F6', '#1E3A8A'] }, 
-    { url: "https://images.unsplash.com/photo-1497366216548-37526070297c", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1560185127-6ed189bf02f4", tags: ['#FFFFFF', '#10B981', '#A7F3D0'] }, 
-    { url: "https://images.unsplash.com/photo-1556910103-1c02745a8e4e", tags: ['#F5F5DC', '#FBBF24', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1505691938895-1758d7feb511", tags: ['#1E3A8A', '#FFFFFF', '#3B82F6'] }, 
-    { url: "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6", tags: ['#8B4513', '#9CA3AF', '#F5F5DC'] }, 
-    { url: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace", tags: ['#EF4444', '#FFFFFF', '#1F2937'] }, 
-    { url: "https://images.unsplash.com/photo-1583847268964-b28ce8f31586", tags: ['#8B5CF6', '#FFFFFF', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a", tags: ['#A7F3D0', '#FFFFFF', '#10B981'] }, 
-    { url: "https://images.unsplash.com/photo-1615874959474-d609969a24d5", tags: ['#F5F5DC', '#1F2937', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e", tags: ['#3B82F6', '#FBBF24', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6", tags: ['#10B981', '#8B4513', '#F5F5DC'] }, 
-    { url: "https://images.unsplash.com/photo-1598928506311-c55dd1b48b61", tags: ['#EF4444', '#1F2937', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1593696140826-c58b021acf8b", tags: ['#1E3A8A', '#FBBF24', '#3B82F6'] }, 
-    { url: "https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a", tags: ['#8B5CF6', '#9CA3AF', '#1F2937'] }, 
-    { url: "https://images.unsplash.com/photo-1505693314120-0d443867891c", tags: ['#A7F3D0', '#3B82F6', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1532323544230-7191fd51bc1b", tags: ['#FFFFFF', '#F5F5DC', '#9CA3AF'] },
-    { url: "https://images.unsplash.com/photo-1616176429133-e88c1b1247a7", tags: ['#1F2937', '#FFFFFF'] },
-    { url: "https://images.unsplash.com/photo-1616176429133-e88c1b1247a7", tags: ['#1F2937', '#FFFFFF'] },
-    { url: "https://images.unsplash.com/photo-1616176429133-e88c1b1247a7", tags: ['#1F2937', '#FFFFFF'] }
-];
-
-// Expand to 100 tagged images with variety
-const roomImagesTagged = [];
-for(let i=0; i<100; i++) {
-    const base = baseRoomsTagged[i % baseRoomsTagged.length];
-    roomImagesTagged.push({
-        url: `${base.url}?auto=format&fit=crop&w=800&q=80&ridx=${i}`,
-        tags: base.tags
-    });
-}
+// Categorized Room catalog by Room Type and Tagged Colors for absolute matching precision
+const roomCatalog = {
+    'Mehmonxona': [
+        { url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0", tags: ['#FFFFFF', '#F5F5DC', '#8B4513', '#9CA3AF'] },
+        { url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
+        { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7", tags: ['#3B82F6', '#1E3A8A', '#9CA3AF', '#8B5CF6'] },
+        { url: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e", tags: ['#10B981', '#A7F3D0', '#FBBF24', '#EF4444'] }
+    ],
+    'Yotoqxona': [
+        { url: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0", tags: ['#FFFFFF', '#F5F5DC', '#8B4513'] },
+        { url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
+        { url: "https://images.unsplash.com/photo-1540518614846-7eded433c457", tags: ['#3B82F6', '#1E3A8A', '#9CA3AF'] },
+        { url: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf", tags: ['#10B981', '#A7F3D0', '#FBBF24', '#8B5CF6', '#EF4444'] }
+    ],
+    'Oshxona': [
+        { url: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f", tags: ['#FFFFFF', '#F5F5DC', '#FBBF24', '#8B4513'] },
+        { url: "https://images.unsplash.com/photo-1600585154526-990dced4db0d", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
+        { url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6", tags: ['#3B82F6', '#1E3A8A', '#10B981', '#A7F3D0', '#8B5CF6', '#EF4444'] }
+    ],
+    'Bolalar xonasi': [
+        { url: "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d", tags: ['#FFFFFF', '#A7F3D0', '#8B5CF6', '#3B82F6'] },
+        { url: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf", tags: ['#FBBF24', '#EF4444', '#F5F5DC', '#8B4513', '#9CA3AF'] }
+    ],
+    'Balkon': [
+        { url: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88", tags: ['#FFFFFF', '#10B981', '#A7F3D0'] },
+        { url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d", tags: ['#8B4513', '#9CA3AF', '#F5F5DC', '#1F2937'] },
+        { url: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9", tags: ['#3B82F6', '#1E3A8A', '#FBBF24', '#EF4444', '#8B5CF6'] }
+    ],
+    'Dahliz': [
+        { url: "https://images.unsplash.com/photo-1600210492493-0946911123ea", tags: ['#FFFFFF', '#F5F5DC', '#8B4513'] },
+        { url: "https://images.unsplash.com/photo-1513584684374-8bdb7489feef", tags: ['#1F2937', '#9CA3AF', '#3B82F6', '#1E3A8A', '#8B5CF6', '#EF4444', '#10B981', '#A7F3D0', '#FBBF24'] }
+    ],
+    'Dush': [
+        { url: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14", tags: ['#FFFFFF', '#F5F5DC', '#A7F3D0', '#10B981'] },
+        { url: "https://images.unsplash.com/photo-1600566752355-35792bedcfea", tags: ['#1F2937', '#9CA3AF', '#3B82F6', '#1E3A8A', '#8B5CF6', '#EF4444', '#8B4513', '#FBBF24'] }
+    ]
+};
 
 // DOM Elements
 const homeBtn = document.getElementById('home-btn');
@@ -310,25 +311,90 @@ function renderImages() {
         return c ? c.name.split(' / ')[0] : hex;
     }).join(', ');
 
-    const roomNamesArr = ['Yotoqxona', 'Mehmonxona', 'Oshxona', 'Dush', 'Dahliz', 'Bolalar xonasi', 'Balkon'];
+    const roomNamesArr = ['Mehmonxona', 'Yotoqxona', 'Oshxona', 'Dush', 'Dahliz', 'Bolalar xonasi', 'Balkon'];
     const selectedRooms = roomNamesArr.slice(0, state.rooms).join(', ');
+
+    const luxTitles = [
+        "Premium Modern Villa", "Hi-Tech Glass Mansion", "Minimalist Eco-Residence",
+        "Neoclassical Royal House", "Smart Concept Penthouse", "Scandinavian Cozy Studio",
+        "Contemporary Luxury Oasis", "Futuristic Cubic Villa", "Eco-Smart Modular House",
+        "Urban Deluxe Cottage"
+    ];
+    const luxSubtitles = [
+        "Yuqori texnologiyali hashamatli dizayn", "Ultra-zamonaviy shaffof fasad", "Tabiiy materiallar va minimalizm",
+        "Klassik hashamat va simmetriya", "Aqlli boshqaruv va panoramik darchalar", "Tabiiy yorug'lik va iliq muhit",
+        "Yashil hudud va basseynli hovli", "Geometrik shakllar va futurizm", "Energiya tejamkor modulli arxitektura",
+        "Shahar chetidagi qulay va zamonaviy dacha"
+    ];
+
+    const featuresPool = [
+        { name: "Aqlli uy", icon: "fa-cpu" },
+        { name: "Basseyn", icon: "fa-water", class: "success" },
+        { name: "Issiq pol", icon: "fa-fire", class: "secondary" },
+        { name: "Panorama oyna", icon: "fa-mountain-sun" },
+        { name: "Terassa", icon: "fa-tree", class: "success" },
+        { name: "Avtoturargoh", icon: "fa-car", class: "secondary" },
+        { name: "Ekologik material", icon: "fa-leaf" }
+    ];
     
     gallery.innerHTML = imagesToShow.map((img, i) => {
-        // AI Match Score Logic
         const matchScore = 95 + Math.floor(Math.random() * 5); // 95% to 99%
+        const designIdx = (startIdx + i) % luxTitles.length;
+        const title = luxTitles[designIdx];
+        const subtitle = luxSubtitles[designIdx];
+
+        // Select 3 unique features based on index and parameters
+        const features = [];
+        features.push(featuresPool[0]); // Smart home is always included
+        features.push(featuresPool[(startIdx + i + 1) % featuresPool.length]);
+        if (state.area > 50) {
+            features.push(featuresPool[1]); // Pool for larger area
+        } else {
+            features.push(featuresPool[2]); // Heated floors
+        }
+
+        const featuresHTML = features.map(f => `
+            <span class="feature-pill ${f.class || ''}">
+                <i class="fa-solid ${f.icon}"></i> ${f.name}
+            </span>
+        `).join('');
         
         return `
             <div class="result-card" onclick="openModal('${img}', ${startIdx + i + 1})">
-                <div class="match-badge">AI Match: ${matchScore}%</div>
+                <div class="match-badge"><i class="fa-solid fa-circle-notch fa-spin"></i> AI Match: ${matchScore}%</div>
                 <img src="${img}" alt="Design ${startIdx + i + 1}" loading="lazy">
                 <div class="result-info">
-                    <h3>Premium Loyiha #${startIdx + i + 1}</h3>
-                    <p><strong>Maydoni:</strong> ${state.area} kv.m</p>
-                    <p><strong>Xonalar (${state.rooms}):</strong> ${selectedRooms}</p>
-                    <p><strong>Ranglar:</strong> ${selectedColorNames}</p>
-                    <div style="margin-top: 1rem; display: flex; align-items: center; justify-content: space-between;">
+                    <div class="result-header">
+                        <span class="result-subtitle-style">${subtitle}</span>
+                        <h3>${title} #${startIdx + i + 1}</h3>
+                    </div>
+                    
+                    <div class="result-meta-grid">
+                        <div class="meta-item">
+                            <i class="fa-solid fa-ruler-combined"></i>
+                            <span>Maydoni: <strong>${state.area} kv.m</strong></span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fa-solid fa-door-open"></i>
+                            <span>Xonalar: <strong>${state.rooms} xona</strong></span>
+                        </div>
+                        <div class="meta-item" style="grid-column: span 2;">
+                            <i class="fa-solid fa-bed"></i>
+                            <span>Xonalar ro'yxati: <strong>${selectedRooms}</strong></span>
+                        </div>
+                        <div class="meta-item" style="grid-column: span 2;">
+                            <i class="fa-solid fa-palette"></i>
+                            <span>Accents: <strong>${selectedColorNames}</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="result-features-list">
+                        ${featuresHTML}
+                    </div>
+
+                    <div class="result-footer">
                         <span class="view-btn"><i class="fa-solid fa-eye"></i> Xonalarni ko'rish</span>
-                        <span class="verified-tag"><i class="fa-solid fa-circle-check"></i> VIP</span>
+                        <span class="verified-tag"><i class="fa-solid fa-circle-check"></i> VIP Premium</span>
                     </div>
                 </div>
             </div>
@@ -345,23 +411,48 @@ function openModal(src, id) {
     modal.classList.remove('hidden');
     captionText.innerHTML = `Loyiha #${id} - Ichki Xonalar`;
     
-    // Filter room images by selected colors
-    // We want to find images that contain AT LEAST ONE of the user's selected colors in their tags
-    let matchedRooms = roomImagesTagged.filter(room => {
-        return room.tags.some(tag => state.selectedColors.includes(tag));
-    });
+    const roomNamesArr = ['Mehmonxona', 'Yotoqxona', 'Oshxona', 'Bolalar xonasi', 'Balkon', 'Dahliz', 'Dush'];
+    let modalHTML = '';
     
-    // If no exact matches, just show a random selection to gracefully degrade
-    if(matchedRooms.length === 0) {
-        matchedRooms = [...roomImagesTagged].sort(() => 0.5 - Math.random());
+    for (let i = 0; i < state.rooms; i++) {
+        // Determine the room name (e.g. Mehmonxona, Yotoqxona, etc.)
+        const roomName = roomNamesArr[i % roomNamesArr.length];
+        
+        // Cycle through selected colors dynamically
+        const assignedColorHex = state.selectedColors[i % state.selectedColors.length];
+        const assignedColorObj = colorsPalette.find(c => c.hex === assignedColorHex) || { name: 'Maxsus', hex: assignedColorHex };
+        const colorNameUz = assignedColorObj.name.split(' / ')[0];
+        
+        // Get the pool for this specific room type
+        const pool = roomCatalog[roomName] || [];
+        
+        // Find matching tagged room images inside the pool
+        let matched = pool.filter(room => room.tags.includes(assignedColorHex));
+        if (matched.length === 0) {
+            matched = pool.filter(room => room.tags.some(tag => state.selectedColors.includes(tag)));
+        }
+        if (matched.length === 0) {
+            matched = pool;
+        }
+        
+        // Take a deterministic room image based on room index to ensure variety
+        const roomImgUrl = matched[i % matched.length].url + "?auto=format&fit=crop&w=600&q=80";
+        
+        modalHTML += `
+            <div class="modal-room-card">
+                <img src="${roomImgUrl}" alt="${roomName}" loading="lazy">
+                <div class="modal-room-details">
+                    <h4>${roomName}</h4>
+                    <div class="color-badge-pill">
+                        <span class="color-dot" style="background-color: ${assignedColorHex}; ${assignedColorHex==='#FFFFFF' ? 'border: 1px solid #ccc;' : ''}"></span>
+                        <span>${colorNameUz} uslubi</span>
+                    </div>
+                </div>
+            </div>
+        `;
     }
     
-    // Show up to matching number of rooms
-    const displayRooms = matchedRooms.slice(0, state.rooms);
-    
-    modalGallery.innerHTML = displayRooms.map(room => `
-        <img src="${room.url}" alt="Interior Room" loading="lazy">
-    `).join('');
+    modalGallery.innerHTML = modalHTML;
 }
 
 function closeModal() {
