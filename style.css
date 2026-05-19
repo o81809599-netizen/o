@@ -737,6 +737,50 @@ button {
     border-radius: 4px;
 }
 
+.filter-modal-content-container {
+    width: 92%;
+    max-width: 550px;
+    max-height: 90vh;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2.5rem;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 40px rgba(59, 130, 246, 0.15);
+    animation: filterModalScaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.filter-modal-content-container::-webkit-scrollbar {
+    width: 6px;
+}
+.filter-modal-content-container::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 3px;
+}
+
+@keyframes filterModalScaleIn {
+    from {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+    }
+}
+
+.filter-section-title {
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.8rem;
+    color: var(--text-main);
+}
+
 .modal-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));

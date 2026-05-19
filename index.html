@@ -43,26 +43,17 @@
                 </div>
             </section>
 
-            <!-- STEP 2: AREA SELECTION -->
-            <section id="step-area" class="step hidden">
-                <h2>Uyingiz maydonini tanlang</h2>
-                <p class="subtitle">16 kv.m dan 100 kv.m gacha bo'lgan o'lchamlardan birini tanlang</p>
-                <div class="grid-buttons scrollable" id="area-buttons">
-                    <!-- JS orqali to'ldiriladi -->
-                </div>
-            </section>
-
-            <!-- STEP 3: ROOMS SELECTION -->
+            <!-- STEP 2: ROOMS SELECTION -->
             <section id="step-rooms" class="step hidden">
-                <h2 id="rooms-title">Nechta xona bo'lishini xohlaysiz?</h2>
-                <p class="subtitle">Tanlangan maydon uchun mos xonalar sonini belgilang</p>
+                <h2 id="rooms-title">Uyingizda nechta xona bo'lishini xohlaysiz?</h2>
+                <p class="subtitle">Orzuingizdagi uy uchun xonalar sonini tanlang</p>
                 <div class="grid-buttons center-grid" id="room-buttons">
                     <!-- JS orqali to'ldiriladi (2,3,4,5,6,7) -->
                 </div>
-                <button class="back-btn" onclick="goBack('step-area')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+                <button class="back-btn" onclick="goBack('step-landing')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
             </section>
 
-            <!-- STEP 4: COLOR SELECTION -->
+            <!-- STEP 3: COLOR SELECTION -->
             <section id="step-colors" class="step hidden">
                 <h2>Xonalar uchun rang tanlang</h2>
                 <p class="subtitle">O'zingizga yoqqan 3 ta rangni tanlang (<span id="color-count">0</span>/3)</p>
@@ -75,7 +66,7 @@
                 </div>
             </section>
 
-            <!-- STEP 5: RESULTS -->
+            <!-- STEP 4: RESULTS -->
             <section id="step-results" class="step hidden">
                 <h2 id="results-title">Siz uchun tayyorlangan loyihalar</h2>
                 <p class="subtitle" id="results-subtitle">Natijalar yuklanmoqda...</p>
@@ -90,6 +81,7 @@
                 </div>
                 <div style="text-align: center; margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
                      <button class="primary-btn" onclick="restartApp()"><i class="fa-solid fa-rotate-right"></i> Yangidan boshlash</button>
+                     <button class="primary-btn" onclick="openFilterModal()" style="background: linear-gradient(135deg, #3B82F6, #1E3A8A);"><i class="fa-solid fa-magnifying-glass"></i> Qidirish & Filtrlash</button>
                      <button class="primary-btn" onclick="nextBatch()" style="background: linear-gradient(135deg, #10B981, #059669);"><i class="fa-solid fa-images"></i> Boshqa rasmlar</button>
                 </div>
             </section>
@@ -103,6 +95,37 @@
             <h2 id="modal-caption" style="color: white; margin-bottom: 20px; text-align: left; font-size: 2rem;">Loyiha tafsilotlari</h2>
             <div id="modal-gallery" class="modal-gallery">
                 <!-- Inner images will be injected here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter Modal for dynamic universal search in the center -->
+    <div id="filter-modal" class="modal hidden">
+        <div class="filter-modal-content-container">
+            <span class="close-modal" onclick="closeFilterModal()">&times;</span>
+            <h2 style="color: white; margin-bottom: 10px; text-align: left; font-size: 1.8rem; display: flex; align-items: center; gap: 0.8rem;">
+                <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Loyihalarni qidirish
+            </h2>
+            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.95rem; text-align: left;">Xonalar soni va ranglarini o'zgartirib qidiring</p>
+            
+            <div class="filter-section">
+                <label class="filter-section-title" style="color: white; font-weight: 600; display: block; margin-bottom: 0.5rem;"><i class="fa-solid fa-door-open" style="color: var(--primary);"></i> Xonalar soni</label>
+                <div class="grid-buttons center-grid" id="filter-room-buttons" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+                    <!-- Dynamically generated room buttons -->
+                </div>
+            </div>
+            
+            <div class="filter-section">
+                <label class="filter-section-title" style="color: white; font-weight: 600; display: block; margin-bottom: 0.5rem;"><i class="fa-solid fa-palette" style="color: var(--primary);"></i> Ranglar palitrasi (3 tagacha tanlang)</label>
+                <div class="colors-grid" id="filter-colors-container" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
+                    <!-- Dynamically generated color items -->
+                </div>
+            </div>
+            
+            <div class="filter-footer">
+                <button class="primary-btn" id="apply-filter-btn" onclick="applyFilters()" style="width: 100%; justify-content: center; gap: 0.8rem; font-size: 1.1rem; padding: 0.8rem 2rem;">
+                    <i class="fa-solid fa-magnifying-glass"></i> Qidiruvni yangilash
+                </button>
             </div>
         </div>
     </div>
