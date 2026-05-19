@@ -427,13 +427,21 @@ function openModal(src, id) {
         
         // Apply elegant custom border and shadow glow matching the selected accent color hex dynamically
         modalHTML += `
-            <div class="modal-room-card" style="border: 2px solid ${assignedColorHex}40; box-shadow: 0 10px 25px ${assignedColorHex}15; transition: all 0.3s ease; border-radius: 18px; overflow: hidden; background: rgba(30, 41, 59, 0.4);">
-                <img src="${roomImgUrl}" alt="${roomName}" loading="lazy" style="transition: transform 0.5s ease;">
-                <div class="modal-room-details" style="border-top: 1px solid ${assignedColorHex}30; padding: 1.2rem;">
+            <div class="modal-room-card" style="border: 2px solid ${assignedColorHex}40; box-shadow: 0 10px 25px ${assignedColorHex}15; transition: all 0.3s ease; border-radius: 18px; overflow: hidden; background: rgba(30, 41, 59, 0.4); display: flex; flex-direction: column;">
+                <div class="room-img-container" style="position: relative; overflow: hidden; height: 210px; width: 100%;">
+                    <img src="${roomImgUrl}" alt="${roomName}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
+                    <!-- Real-time blend overlays that physically adapt the room details to match the chosen accent color -->
+                    <div class="color-tint-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: ${assignedColorHex}; opacity: 0.22; mix-blend-mode: color; pointer-events: none;"></div>
+                    <div class="color-glow-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: ${assignedColorHex}; opacity: 0.08; mix-blend-mode: overlay; pointer-events: none;"></div>
+                    <div class="gradient-fade-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 60%, rgba(15, 23, 42, 0.85)); pointer-events: none;"></div>
+                </div>
+                <div class="modal-room-details" style="border-top: 1px solid ${assignedColorHex}30; padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
                     <h4 style="font-size: 1.25rem; margin-bottom: 0.6rem; color: #fff;">${roomName}</h4>
-                    <div class="color-badge-pill" style="background: ${assignedColorHex}15; border: 1px solid ${assignedColorHex}40; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 20px;">
-                        <span class="color-dot" style="background-color: ${assignedColorHex}; ${assignedColorHex==='#FFFFFF' ? 'border: 1px solid #ccc;' : ''} width: 10px; height: 10px; border-radius: 50%;"></span>
-                        <span style="color: ${assignedColorHex==='#FFFFFF' ? '#fff' : assignedColorHex}; font-weight: 600; font-size: 0.85rem;">${colorNameUz} uslubi</span>
+                    <div>
+                        <div class="color-badge-pill" style="background: ${assignedColorHex}15; border: 1px solid ${assignedColorHex}40; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 20px;">
+                            <span class="color-dot" style="background-color: ${assignedColorHex}; ${assignedColorHex==='#FFFFFF' ? 'border: 1px solid #ccc;' : ''} width: 10px; height: 10px; border-radius: 50%;"></span>
+                            <span style="color: ${assignedColorHex==='#FFFFFF' ? '#fff' : assignedColorHex}; font-weight: 600; font-size: 0.85rem;">${colorNameUz} uslubi</span>
+                        </div>
                     </div>
                 </div>
             </div>
