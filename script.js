@@ -421,17 +421,19 @@ function openModal(src, id) {
             matched = pool;
         }
         
-        // Take a deterministic room image based on room index to ensure variety
-        const roomImgUrl = matched[i % matched.length].url + "?auto=format&fit=crop&w=600&q=80";
+        // Incorporate project ID to guarantee different projects display entirely unique interior images
+        const uniqueSelectionIdx = (i + id) % matched.length;
+        const roomImgUrl = matched[uniqueSelectionIdx].url + "?auto=format&fit=crop&w=600&q=80";
         
+        // Apply elegant custom border and shadow glow matching the selected accent color hex dynamically
         modalHTML += `
-            <div class="modal-room-card">
-                <img src="${roomImgUrl}" alt="${roomName}" loading="lazy">
-                <div class="modal-room-details">
-                    <h4>${roomName}</h4>
-                    <div class="color-badge-pill">
-                        <span class="color-dot" style="background-color: ${assignedColorHex}; ${assignedColorHex==='#FFFFFF' ? 'border: 1px solid #ccc;' : ''}"></span>
-                        <span>${colorNameUz} uslubi</span>
+            <div class="modal-room-card" style="border: 2px solid ${assignedColorHex}40; box-shadow: 0 10px 25px ${assignedColorHex}15; transition: all 0.3s ease; border-radius: 18px; overflow: hidden; background: rgba(30, 41, 59, 0.4);">
+                <img src="${roomImgUrl}" alt="${roomName}" loading="lazy" style="transition: transform 0.5s ease;">
+                <div class="modal-room-details" style="border-top: 1px solid ${assignedColorHex}30; padding: 1.2rem;">
+                    <h4 style="font-size: 1.25rem; margin-bottom: 0.6rem; color: #fff;">${roomName}</h4>
+                    <div class="color-badge-pill" style="background: ${assignedColorHex}15; border: 1px solid ${assignedColorHex}40; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 20px;">
+                        <span class="color-dot" style="background-color: ${assignedColorHex}; ${assignedColorHex==='#FFFFFF' ? 'border: 1px solid #ccc;' : ''} width: 10px; height: 10px; border-radius: 50%;"></span>
+                        <span style="color: ${assignedColorHex==='#FFFFFF' ? '#fff' : assignedColorHex}; font-weight: 600; font-size: 0.85rem;">${colorNameUz} uslubi</span>
                     </div>
                 </div>
             </div>
