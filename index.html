@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zamonaviy Uy Loyihalari</title>
+    <title>DreamHouse — Orzuingizdagi Uy Loyihasi</title>
+    <meta name="description" content="Uyingiz xonalari, rangi, hojatxona va dush sozlamalarini tanlang — mukammal uy loyihasini ko'ring.">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <div class="background-animation">
@@ -23,7 +25,19 @@
             <div class="logo">
                 <i class="fa-solid fa-house-chimney-window"></i> DreamHouse
             </div>
-            <button id="home-btn" class="icon-btn hidden"><i class="fa-solid fa-house"></i> Bosh sahifa</button>
+            <div class="header-right">
+                <button id="home-btn" class="icon-btn hidden"><i class="fa-solid fa-house"></i> Bosh sahifa</button>
+                <div class="qr-wrapper" id="qr-wrapper">
+                    <button class="qr-btn" onclick="toggleQR()" title="QR kod orqali kirish">
+                        <i class="fa-solid fa-qrcode"></i>
+                    </button>
+                    <div class="qr-popup hidden" id="qr-popup">
+                        <p>Skanerlang va kiring:</p>
+                        <div id="qr-code-canvas"></div>
+                        <span class="qr-url">o81809599-netizen.github.io/o/</span>
+                    </div>
+                </div>
+            </div>
         </header>
 
         <main id="main-content">
@@ -31,99 +45,135 @@
             <section id="step-landing" class="step active">
                 <div class="hero-text">
                     <h1>Orzuingizdagi uyni <span class="gradient-text">loyihalang</span></h1>
-                    <p>Eng ilg'or dizaynlar bilan uyingiz tuzilishi va xona ranglarini o'zingiz moslashtiring.</p>
+                    <p>Xonalar soni, hojatxona, dush va rang tanlovingizga qarab 3 ta tayyor uy loyihasini ko'ring.</p>
                 </div>
                 <div class="hero-image-container">
-                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="Modern House" class="hero-img">
+                    <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80" alt="Modern House" class="hero-img">
                 </div>
                 <div class="landing-cta-container">
-                    <button class="primary-btn landing-cta-btn" onclick="startUnifiedFlow()">
-                        <i class="fa-solid fa-compass"></i> Uylarni ko'rish
+                    <button class="primary-btn landing-cta-btn" onclick="startFlow()">
+                        <i class="fa-solid fa-compass"></i> Boshlash
                     </button>
                 </div>
             </section>
 
-            <!-- STEP 2: ROOMS SELECTION -->
+            <!-- STEP 2: ROOMS -->
             <section id="step-rooms" class="step hidden">
-                <h2 id="rooms-title">Uyingizda nechta xona bo'lishini xohlaysiz?</h2>
-                <p class="subtitle">Orzuingizdagi uy uchun xonalar sonini tanlang</p>
-                <div class="grid-buttons center-grid" id="room-buttons">
-                    <!-- JS orqali to'ldiriladi (2,3,4,5,6,7) -->
+                <div class="step-header">
+                    <div class="step-badge"><i class="fa-solid fa-door-open"></i> Qadam 1/4</div>
+                    <h2>Nechta xona kerak?</h2>
+                    <p class="subtitle">Orzuingizdagi uy uchun umumiy xonalar sonini tanlang</p>
                 </div>
+                <div class="grid-buttons center-grid" id="room-buttons"></div>
                 <button class="back-btn" onclick="goBack('step-landing')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
             </section>
 
-            <!-- STEP 3: COLOR SELECTION -->
-            <section id="step-colors" class="step hidden">
-                <h2>Xonalar uchun rang tanlang</h2>
-                <p class="subtitle">O'zingizga yoqqan 3 ta rangni tanlang (<span id="color-count">0</span>/3)</p>
-                <div class="colors-grid" id="colors-container">
-                    <!-- JS orqali to'ldiriladi -->
+            <!-- STEP 3: BATHROOMS -->
+            <section id="step-bathrooms" class="step hidden">
+                <div class="step-header">
+                    <div class="step-badge"><i class="fa-solid fa-toilet"></i> Qadam 2/4</div>
+                    <h2>Hojatxona (WC) sozlamalari</h2>
+                    <p class="subtitle">Uyingizda qanday hojatxona kerakligini tanlang</p>
                 </div>
+
+                <div class="config-group">
+                    <label class="config-label"><i class="fa-solid fa-hashtag"></i> Nechta hojatxona?</label>
+                    <div class="grid-buttons center-grid" id="bathroom-count-buttons"></div>
+                </div>
+
+                <div class="config-group" id="bathroom-type-group">
+                    <label class="config-label"><i class="fa-solid fa-shower"></i> Hojatxona va dush qanday bo'lsin?</label>
+                    <div class="type-cards-grid">
+                        <div class="type-card" id="type-combined" onclick="selectBathroomType('combined')">
+                            <i class="fa-solid fa-bath"></i>
+                            <strong>Birgalikda</strong>
+                            <span>WC + Dush bir xonada</span>
+                        </div>
+                        <div class="type-card" id="type-separate" onclick="selectBathroomType('separate')">
+                            <i class="fa-solid fa-arrows-left-right"></i>
+                            <strong>Alohida</strong>
+                            <span>WC va Dush alohida xonalarda</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="back-btn" onclick="goBack('step-rooms')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+            </section>
+
+            <!-- STEP 4: SHOWER (only if separate) -->
+            <section id="step-shower" class="step hidden">
+                <div class="step-header">
+                    <div class="step-badge"><i class="fa-solid fa-shower"></i> Qadam 3/4</div>
+                    <h2>Dush xonasi sozlamalari</h2>
+                    <p class="subtitle">Alohida dush xonasi nechta bo'lsin?</p>
+                </div>
+                <div class="grid-buttons center-grid" id="shower-count-buttons"></div>
+                <button class="back-btn" onclick="goBack('step-bathrooms')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+            </section>
+
+            <!-- STEP 5: COLORS -->
+            <section id="step-colors" class="step hidden">
+                <div class="step-header">
+                    <div class="step-badge"><i class="fa-solid fa-palette"></i> Qadam 4/4</div>
+                    <h2>Xonalar uchun rang tanlang</h2>
+                    <p class="subtitle">O'zingizga yoqqan 3 ta rangni tanlang (<span id="color-count">0</span>/3)</p>
+                </div>
+                <div class="colors-grid" id="colors-container"></div>
                 <div class="action-buttons">
-                    <button class="back-btn" onclick="goBack('step-rooms')"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
+                    <button class="back-btn" onclick="goBackFromColors()"><i class="fa-solid fa-arrow-left"></i> Orqaga</button>
                     <button id="generate-colors-btn" class="primary-btn disabled" disabled>Loyihalarni ko'rish <i class="fa-solid fa-magic"></i></button>
                 </div>
             </section>
 
-            <!-- STEP 4: RESULTS -->
+            <!-- STEP 6: RESULTS -->
             <section id="step-results" class="step hidden">
-                <h2 id="results-title">Siz uchun tayyorlangan loyihalar</h2>
+                <h2 id="results-title">Sizga mos 3 ta loyiha</h2>
                 <p class="subtitle" id="results-subtitle">Natijalar yuklanmoqda...</p>
-                
+
                 <div class="loader-container" id="results-loader">
                     <div class="spinner"></div>
                     <p>Sun'iy intellekt loyihalarni tayyorlamoqda...</p>
                 </div>
 
-                <div class="results-list hidden" id="results-gallery">
-                    <!-- Rasmlar shu yerga tushadi -->
-                </div>
+                <div class="results-three-grid hidden" id="results-gallery"></div>
+
                 <div style="text-align: center; margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-                     <button class="primary-btn" onclick="restartApp()"><i class="fa-solid fa-rotate-right"></i> Yangidan boshlash</button>
-                     <button class="primary-btn" onclick="openFilterModal()" style="background: linear-gradient(135deg, #3B82F6, #1E3A8A);"><i class="fa-solid fa-magnifying-glass"></i> Qidirish & Filtrlash</button>
-                     <button class="primary-btn" onclick="nextBatch()" style="background: linear-gradient(135deg, #10B981, #059669);"><i class="fa-solid fa-images"></i> Boshqa rasmlar</button>
+                    <button class="primary-btn" onclick="restartApp()"><i class="fa-solid fa-rotate-right"></i> Yangidan boshlash</button>
+                    <button class="primary-btn" onclick="openFilterModal()" style="background: linear-gradient(135deg, #3B82F6, #1E3A8A);"><i class="fa-solid fa-sliders"></i> Filtrlash</button>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- Modal for viewing full details -->
-    <div id="image-modal" class="modal hidden">
+    <!-- HOUSE DETAIL MODAL (Floor plan + Rooms) -->
+    <div id="house-modal" class="modal hidden">
         <div class="modal-content-container">
-            <span class="close-modal" onclick="closeModal()">&times;</span>
-            <h2 id="modal-caption" style="color: white; margin-bottom: 20px; text-align: left; font-size: 2rem;">Loyiha tafsilotlari</h2>
-            <div id="modal-gallery" class="modal-gallery">
-                <!-- Inner images will be injected here -->
-            </div>
+            <span class="close-modal" onclick="closeHouseModal()">&times;</span>
+            <div id="house-modal-inner"></div>
         </div>
     </div>
 
-    <!-- Filter Modal for dynamic universal search in the center -->
+    <!-- FILTER MODAL -->
     <div id="filter-modal" class="modal hidden">
         <div class="filter-modal-content-container">
             <span class="close-modal" onclick="closeFilterModal()">&times;</span>
-            <h2 style="color: white; margin-bottom: 10px; text-align: left; font-size: 1.8rem; display: flex; align-items: center; gap: 0.8rem;">
-                <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Loyihalarni qidirish
+            <h2 style="color: white; margin-bottom: 10px; font-size: 1.8rem; display: flex; align-items: center; gap: 0.8rem;">
+                <i class="fa-solid fa-sliders" style="color: var(--primary);"></i> Filtrlash
             </h2>
-            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.95rem; text-align: left;">Xonalar soni va ranglarini o'zgartirib qidiring</p>
-            
+            <p class="subtitle" style="margin-bottom: 1.5rem; font-size: 0.95rem; text-align: left;">Tanlovlaringizni o'zgartiring</p>
+
             <div class="filter-section">
-                <label class="filter-section-title" style="color: white; font-weight: 600; display: block; margin-bottom: 0.5rem;"><i class="fa-solid fa-door-open" style="color: var(--primary);"></i> Xonalar soni</label>
-                <div class="grid-buttons center-grid" id="filter-room-buttons" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
-                    <!-- Dynamically generated room buttons -->
-                </div>
+                <label class="filter-section-title"><i class="fa-solid fa-door-open" style="color:var(--primary)"></i> Xonalar soni</label>
+                <div class="grid-buttons center-grid" id="filter-room-buttons" style="margin-top:0.5rem; margin-bottom:1.5rem;"></div>
             </div>
-            
+
             <div class="filter-section">
-                <label class="filter-section-title" style="color: white; font-weight: 600; display: block; margin-bottom: 0.5rem;"><i class="fa-solid fa-palette" style="color: var(--primary);"></i> Ranglar palitrasi (3 tagacha tanlang)</label>
-                <div class="colors-grid" id="filter-colors-container" style="margin-top: 0.5rem; margin-bottom: 1.5rem;">
-                    <!-- Dynamically generated color items -->
-                </div>
+                <label class="filter-section-title"><i class="fa-solid fa-palette" style="color:var(--primary)"></i> Ranglar (3 tagacha)</label>
+                <div class="colors-grid" id="filter-colors-container" style="margin-top:0.5rem; margin-bottom:1.5rem;"></div>
             </div>
-            
+
             <div class="filter-footer">
-                <button class="primary-btn" id="apply-filter-btn" onclick="applyFilters()" style="width: 100%; justify-content: center; gap: 0.8rem; font-size: 1.1rem; padding: 0.8rem 2rem;">
+                <button class="primary-btn" id="apply-filter-btn" onclick="applyFilters()" style="width:100%; justify-content:center;">
                     <i class="fa-solid fa-magnifying-glass"></i> Qidiruvni yangilash
                 </button>
             </div>

@@ -1,572 +1,466 @@
-// State
-let state = {
+// ==================== STATE ====================
+const state = {
     rooms: null,
+    bathrooms: 1,
+    bathroomType: 'combined', // 'combined' | 'separate'
+    showers: 1,
     selectedColors: [],
-    currentBatch: 0
+    currentStyle: null
 };
 
-// Data
+// ==================== DATA ====================
 const colorsPalette = [
-    { name: 'Oq / White', hex: '#FFFFFF' },
-    { name: 'Kulrang / Gray', hex: '#9CA3AF' },
-    { name: 'Qora / Black', hex: '#1F2937' },
-    { name: 'Och jigarrang / Beige', hex: '#F5F5DC' },
-    { name: 'Jigarrang / Brown', hex: '#8B4513' },
-    { name: 'Moviy / Blue', hex: '#3B82F6' },
-    { name: 'To\'q ko\'k / Navy', hex: '#1E3A8A' },
-    { name: 'Yashil / Green', hex: '#10B981' },
-    { name: 'Och yashil / Mint', hex: '#A7F3D0' },
-    { name: 'Sariq / Yellow', hex: '#FBBF24' },
-    { name: 'Qizil / Red', hex: '#EF4444' },
-    { name: 'Binafsha / Purple', hex: '#8B5CF6' }
+    { hex: '#FFFFFF', name: 'Oq / Klassik' }, { hex: '#F5F5DC', name: 'Krем / Beige' },
+    { hex: '#9CA3AF', name: 'Kulrang / Neytral' }, { hex: '#1F2937', name: 'Qora / Elegant' },
+    { hex: '#8B4513', name: 'Jigarrang / Vintage' }, { hex: '#3B82F6', name: 'Moviy / Zamonaviy' },
+    { hex: '#1E3A8A', name: 'To\'q moviy / Navy' }, { hex: '#10B981', name: 'Yashil / Eco' },
+    { hex: '#A7F3D0', name: 'Och yashil / Mint' }, { hex: '#FBBF24', name: 'Sariq / Warm' },
+    { hex: '#EF4444', name: 'Qizil / Bold' }, { hex: '#8B5CF6', name: 'Binafsha / Royal' }
 ];
 
-// Curated base houses & 3D plans with room compatibility and dominant color tags
-const baseHousesCatalog = [
-    { url: "images/floor_plan_3d_2_1778855438613.png", type: 'chizma', rooms: [2, 3], tags: ['#FFFFFF', '#9CA3AF', '#F5F5DC'] },
-    { url: "images/floor_plan_3d_3_1778855647178.png", type: 'chizma', rooms: [4, 5], tags: ['#FFFFFF', '#9CA3AF', '#8B4513'] },
-    { url: "images/floor_plan_3d_4_1778855704907.png", type: 'chizma', rooms: [6, 7], tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
-    { url: "images/media__1778853766759.png", type: 'fasad', rooms: [4, 5], tags: ['#FFFFFF', '#F5F5DC', '#8B4513'] },
-    { url: "images/media__1778853791496.png", type: 'fasad', rooms: [6, 7], tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
-    
-    // Unsplash Modern Villa Exterior images with color and room matching tags
-    { url: "https://images.unsplash.com/photo-1613490493576-7fde63acd811", type: 'fasad', rooms: [6, 7], tags: ['#FFFFFF', '#3B82F6', '#1E3A8A'] }, 
-    { url: "https://images.unsplash.com/photo-1580587767526-cf3671a0e614", type: 'fasad', rooms: [4, 5], tags: ['#F5F5DC', '#8B4513', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1518780664697-55e3ad937233", type: 'fasad', rooms: [2, 3], tags: ['#FFFFFF', '#10B981', '#A7F3D0'] }, 
-    { url: "https://images.unsplash.com/photo-1480074568708-e7b720bb3f09", type: 'fasad', rooms: [2, 3], tags: ['#FBBF24', '#FFFFFF', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994", type: 'fasad', rooms: [4, 5], tags: ['#FFFFFF', '#1F2937', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1570129477492-45c003edd2be", type: 'fasad', rooms: [6, 7], tags: ['#FFFFFF', '#9CA3AF', '#F5F5DC'] }, 
-    { url: "https://images.unsplash.com/photo-1576941089067-2de3c901e126", type: 'fasad', rooms: [6, 7], tags: ['#1F2937', '#FFFFFF', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83", type: 'fasad', rooms: [4, 5], tags: ['#8B4513', '#F5F5DC', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1449156001437-3a16d1dfda70", type: 'fasad', rooms: [2, 3], tags: ['#FFFFFF', '#9CA3AF', '#EF4444'] }, 
-    { url: "https://images.unsplash.com/photo-1494526585095-c41746248156", type: 'fasad', rooms: [4, 5], tags: ['#1E3A8A', '#3B82F6', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1513584684374-8bdb7489feef", type: 'fasad', rooms: [4, 5], tags: ['#1F2937', '#9CA3AF', '#8B5CF6'] }, 
-    { url: "https://images.unsplash.com/photo-1512918766775-d263227b5311", type: 'fasad', rooms: [6, 7], tags: ['#FFFFFF', '#F5F5DC', '#3B82F6'] }, 
-    { url: "https://images.unsplash.com/photo-1505843513577-22bb7d21e455", type: 'fasad', rooms: [6, 7], tags: ['#1F2937', '#FFFFFF', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c", type: 'fasad', rooms: [6, 7], tags: ['#FFFFFF', '#F5F5DC', '#8B4513'] }, 
-    { url: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9", type: 'fasad', rooms: [6, 7], tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] }, 
-    { url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d", type: 'fasad', rooms: [6, 7], tags: ['#FFFFFF', '#9CA3AF', '#8B4513'] }, 
-    { url: "https://images.unsplash.com/photo-1600566753190-17f0bcd2a6c4", type: 'fasad', rooms: [2, 3], tags: ['#F5F5DC', '#FFFFFF', '#9CA3AF'] }, 
-    { url: "https://images.unsplash.com/photo-1600573472591-ee6b68d14c68", type: 'fasad', rooms: [6, 7], tags: ['#1F2937', '#FFFFFF', '#3B82F6'] }
+// 3 House Styles — each has exterior images per room tier
+const houseStyles = [
+    {
+        id: 'villa',
+        label: 'Villa',
+        labelUz: 'Hashamatli Villa',
+        icon: 'fa-crown',
+        desc: 'Keng, ulug\'vor, premium darajali arxitektura',
+        badge: '⭐ Premium',
+        exteriors: {
+            small: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c',
+            medium: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811',
+            large: 'https://images.unsplash.com/photo-1512918766775-d263227b5311'
+        },
+        floorPlans: {
+            small: 'images/floor_plan_3d_2_1778855438613.png',
+            medium: 'images/floor_plan_3d_3_1778855647178.png',
+            large: 'images/floor_plan_3d_4_1778855704907.png'
+        }
+    },
+    {
+        id: 'modern',
+        label: 'Premium',
+        labelUz: 'Zamonaviy Premium',
+        icon: 'fa-gem',
+        desc: 'Ultra-zamonaviy, shisha fasadli, minimalist',
+        badge: '💎 Zamonaviy',
+        exteriors: {
+            small: 'https://images.unsplash.com/photo-1600566753190-17f0bcd2a6c4',
+            medium: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994',
+            large: 'https://images.unsplash.com/photo-1576941089067-2de3c901e126'
+        },
+        floorPlans: {
+            small: 'images/floor_plan_3d_2_1778855438613.png',
+            medium: 'images/floor_plan_3d_3_1778855647178.png',
+            large: 'images/floor_plan_3d_4_1778855704907.png'
+        }
+    },
+    {
+        id: 'classic',
+        label: 'Klassik',
+        labelUz: 'Qulay Klassik',
+        icon: 'fa-house',
+        desc: 'Sodda, qulay, oilaviy, hayotiy',
+        badge: '🏡 Klassik',
+        exteriors: {
+            small: 'https://images.unsplash.com/photo-1480074568708-e7b720bb3f09',
+            medium: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83',
+            large: 'https://images.unsplash.com/photo-1570129477492-45c003edd2be'
+        },
+        floorPlans: {
+            small: 'images/floor_plan_3d_2_1778855438613.png',
+            medium: 'images/floor_plan_3d_3_1778855647178.png',
+            large: 'images/floor_plan_3d_4_1778855704907.png'
+        }
+    }
 ];
 
-// Categorized Room catalog by Room Type and Tagged Colors for absolute matching precision
 const roomCatalog = {
     'Mehmonxona': [
-        { url: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0", tags: ['#FFFFFF', '#F5F5DC', '#8B4513', '#9CA3AF'] },
-        { url: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
-        { url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7", tags: ['#3B82F6', '#1E3A8A', '#9CA3AF', '#8B5CF6'] },
-        { url: "https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e", tags: ['#10B981', '#A7F3D0', '#FBBF24', '#EF4444'] }
+        { url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0', tags: ['#FFFFFF','#F5F5DC','#8B4513','#9CA3AF'] },
+        { url: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c', tags: ['#1F2937','#9CA3AF','#FFFFFF'] },
+        { url: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7', tags: ['#3B82F6','#1E3A8A','#8B5CF6'] },
+        { url: 'https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e', tags: ['#10B981','#FBBF24','#EF4444'] }
     ],
     'Yotoqxona': [
-        { url: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0", tags: ['#FFFFFF', '#F5F5DC', '#8B4513'] },
-        { url: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
-        { url: "https://images.unsplash.com/photo-1540518614846-7eded433c457", tags: ['#3B82F6', '#1E3A8A', '#9CA3AF'] },
-        { url: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf", tags: ['#10B981', '#A7F3D0', '#FBBF24', '#8B5CF6', '#EF4444'] }
+        { url: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0', tags: ['#FFFFFF','#F5F5DC','#8B4513'] },
+        { url: 'https://images.unsplash.com/photo-1505693416388-ac5ce068fe85', tags: ['#1F2937','#9CA3AF'] },
+        { url: 'https://images.unsplash.com/photo-1540518614846-7eded433c457', tags: ['#3B82F6','#1E3A8A'] },
+        { url: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf', tags: ['#10B981','#8B5CF6','#EF4444'] }
     ],
     'Oshxona': [
-        { url: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f", tags: ['#FFFFFF', '#F5F5DC', '#FBBF24', '#8B4513'] },
-        { url: "https://images.unsplash.com/photo-1600585154526-990dced4db0d", tags: ['#1F2937', '#9CA3AF', '#FFFFFF'] },
-        { url: "https://images.unsplash.com/photo-1556228453-efd6c1ff04f6", tags: ['#3B82F6', '#1E3A8A', '#10B981', '#A7F3D0', '#8B5CF6', '#EF4444'] }
+        { url: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f', tags: ['#FFFFFF','#F5F5DC','#FBBF24'] },
+        { url: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d', tags: ['#1F2937','#9CA3AF'] },
+        { url: 'https://images.unsplash.com/photo-1556228453-efd6c1ff04f6', tags: ['#3B82F6','#10B981','#8B5CF6','#EF4444'] }
     ],
     'Bolalar xonasi': [
-        { url: "https://images.unsplash.com/photo-1560185007-c5ca9d2c014d", tags: ['#FFFFFF', '#A7F3D0', '#8B5CF6', '#3B82F6'] },
-        { url: "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf", tags: ['#FBBF24', '#EF4444', '#F5F5DC', '#8B4513', '#9CA3AF'] }
+        { url: 'https://images.unsplash.com/photo-1560185007-c5ca9d2c014d', tags: ['#FFFFFF','#A7F3D0','#8B5CF6','#3B82F6'] },
+        { url: 'https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf', tags: ['#FBBF24','#EF4444','#F5F5DC'] }
     ],
     'Balkon': [
-        { url: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88", tags: ['#FFFFFF', '#10B981', '#A7F3D0'] },
-        { url: "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d", tags: ['#8B4513', '#9CA3AF', '#F5F5DC', '#1F2937'] },
-        { url: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9", tags: ['#3B82F6', '#1E3A8A', '#FBBF24', '#EF4444', '#8B5CF6'] }
+        { url: 'https://images.unsplash.com/photo-1533090161767-e6ffed986c88', tags: ['#FFFFFF','#10B981'] },
+        { url: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9', tags: ['#3B82F6','#FBBF24','#EF4444','#8B5CF6'] }
     ],
     'Dahliz': [
-        { url: "https://images.unsplash.com/photo-1600210492493-0946911123ea", tags: ['#FFFFFF', '#F5F5DC', '#8B4513'] },
-        { url: "https://images.unsplash.com/photo-1513584684374-8bdb7489feef", tags: ['#1F2937', '#9CA3AF', '#3B82F6', '#1E3A8A', '#8B5CF6', '#EF4444', '#10B981', '#A7F3D0', '#FBBF24'] }
+        { url: 'https://images.unsplash.com/photo-1600210492493-0946911123ea', tags: ['#FFFFFF','#F5F5DC','#8B4513'] },
+        { url: 'https://images.unsplash.com/photo-1513584684374-8bdb7489feef', tags: ['#1F2937','#9CA3AF','#3B82F6','#8B5CF6'] }
     ],
-    'Dush': [
-        { url: "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14", tags: ['#FFFFFF', '#F5F5DC', '#A7F3D0', '#10B981'] },
-        { url: "https://images.unsplash.com/photo-1600566752355-35792bedcfea", tags: ['#1F2937', '#9CA3AF', '#3B82F6', '#1E3A8A', '#8B5CF6', '#EF4444', '#8B4513', '#FBBF24'] }
+    'Hojatxona': [
+        { url: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14', tags: ['#FFFFFF','#F5F5DC','#A7F3D0'] },
+        { url: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea', tags: ['#1F2937','#9CA3AF','#3B82F6','#8B5CF6','#EF4444'] }
+    ],
+    'Dush xonasi': [
+        { url: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14', tags: ['#FFFFFF','#10B981','#A7F3D0'] },
+        { url: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a', tags: ['#1F2937','#3B82F6','#8B5CF6','#EF4444'] }
     ]
 };
 
-// DOM Elements
-const homeBtn = document.getElementById('home-btn');
-const allSteps = document.querySelectorAll('.step');
-const areaButtonsContainer = document.getElementById('area-buttons');
-const roomButtonsContainer = document.getElementById('room-buttons');
-const colorsContainer = document.getElementById('colors-container');
-const colorCountEl = document.getElementById('color-count');
-const generateColorsBtn = document.getElementById('generate-colors-btn');
-
-// Initialization
+// ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', () => {
-    initRoomButtons();
-    initColorButtons();
-    
-    homeBtn.addEventListener('click', restartApp);
-    generateColorsBtn.addEventListener('click', () => showResults('unified'));
-    
-    // Modal events
-    document.querySelector('.close-modal').addEventListener('click', closeModal);
-    document.getElementById('image-modal').addEventListener('click', (e) => {
-        if(e.target.id === 'image-modal') closeModal();
+    // QR Code
+    new QRCode(document.getElementById('qr-code-canvas'), {
+        text: 'https://o81809599-netizen.github.io/o/',
+        width: 160, height: 160,
+        colorDark: '#0f172a', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H
     });
-    
-    document.getElementById('filter-modal').addEventListener('click', (e) => {
-        if(e.target.id === 'filter-modal') closeFilterModal();
+
+    // Room buttons 2-7
+    const roomBtn = document.getElementById('room-buttons');
+    for (let i = 2; i <= 7; i++) {
+        const b = document.createElement('button');
+        b.className = 'select-btn';
+        b.textContent = i + ' xona';
+        b.onclick = () => selectRooms(i);
+        roomBtn.appendChild(b);
+    }
+
+    // Bathroom count 1-3
+    const bathBtn = document.getElementById('bathroom-count-buttons');
+    for (let i = 1; i <= 3; i++) {
+        const b = document.createElement('button');
+        b.className = 'select-btn';
+        b.textContent = i + ' ta';
+        b.onclick = () => selectBathroomCount(i);
+        bathBtn.appendChild(b);
+    }
+
+    // Shower count 1-3
+    const showerBtn = document.getElementById('shower-count-buttons');
+    for (let i = 1; i <= 3; i++) {
+        const b = document.createElement('button');
+        b.className = 'select-btn';
+        b.textContent = i + ' ta';
+        b.onclick = () => selectShowerCount(i);
+        showerBtn.appendChild(b);
+    }
+
+    // Colors
+    const colorsContainer = document.getElementById('colors-container');
+    colorsPalette.forEach((c, idx) => {
+        const d = document.createElement('div');
+        d.className = 'color-item';
+        d.style.backgroundColor = c.hex;
+        if (c.hex === '#FFFFFF') d.style.border = '2px solid #ccc';
+        d.title = c.name;
+        d.onclick = () => toggleColor(idx, d, c.hex);
+        colorsContainer.appendChild(d);
     });
+
+    document.getElementById('generate-colors-btn').onclick = showResults;
+    document.getElementById('home-btn').onclick = restartApp;
+
+    // Close modals on backdrop click
+    document.getElementById('house-modal').onclick = (e) => { if (e.target.id === 'house-modal') closeHouseModal(); };
+    document.getElementById('filter-modal').onclick = (e) => { if (e.target.id === 'filter-modal') closeFilterModal(); };
 });
 
-// Navigation Functions
-function showStep(stepId) {
-    allSteps.forEach(step => {
-        step.classList.add('hidden');
-        step.classList.remove('active');
-    });
-    const target = document.getElementById(stepId);
-    target.classList.remove('hidden');
-    
-    // Kichik animatsiya effekti uchun
-    setTimeout(() => {
-        target.classList.add('active');
-    }, 10);
-
-    if(stepId === 'step-landing') {
-        homeBtn.classList.add('hidden');
-    } else {
-        homeBtn.classList.remove('hidden');
-    }
+// ==================== NAVIGATION ====================
+function showStep(id) {
+    document.querySelectorAll('.step').forEach(s => { s.classList.add('hidden'); s.classList.remove('active'); });
+    const el = document.getElementById(id);
+    el.classList.remove('hidden');
+    el.classList.add('active');
+    const isHome = id === 'step-landing';
+    document.getElementById('home-btn').classList.toggle('hidden', isHome);
 }
 
-function goBack(stepId) {
-    showStep(stepId);
-}
+function startFlow() { showStep('step-rooms'); }
+function goBack(to) { showStep(to); }
 
-function startUnifiedFlow() {
-    showStep('step-rooms');
+function goBackFromColors() {
+    if (state.bathroomType === 'separate') showStep('step-shower');
+    else showStep('step-bathrooms');
 }
 
 function restartApp() {
-    state = { rooms: null, selectedColors: [], currentBatch: 0 };
-    
-    // Reset selections
-    document.querySelectorAll('.select-btn').forEach(btn => btn.classList.remove('selected'));
-    document.querySelectorAll('.color-item').forEach(item => item.classList.remove('selected'));
-    updateColorBtn();
-    
+    state.rooms = null; state.bathrooms = 1; state.bathroomType = 'combined';
+    state.showers = 1; state.selectedColors = [];
+    document.querySelectorAll('.select-btn').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.color-item').forEach(b => b.classList.remove('selected'));
+    document.querySelectorAll('.type-card').forEach(b => b.classList.remove('selected'));
+    document.getElementById('color-count').textContent = '0';
+    updateColorsBtn();
     showStep('step-landing');
 }
 
-// Step 2: Rooms Init
-function initRoomButtons() {
-    let buttonsHTML = '';
-    for(let i = 2; i <= 7; i++) {
-        buttonsHTML += `<button class="select-btn" onclick="selectRooms(${i})">${i} xona</button>`;
-    }
-    roomButtonsContainer.innerHTML = buttonsHTML;
+// ==================== SELECTIONS ====================
+function selectRooms(n) {
+    state.rooms = n;
+    document.querySelectorAll('#room-buttons .select-btn').forEach(b => {
+        b.classList.toggle('selected', b.textContent.includes(n));
+    });
+    setTimeout(() => showStep('step-bathrooms'), 300);
 }
 
-function selectRooms(val) {
-    state.rooms = val;
-    Array.from(roomButtonsContainer.children).forEach(btn => {
-        btn.classList.remove('selected');
-        if(btn.textContent.includes(val)) btn.classList.add('selected');
+function selectBathroomCount(n) {
+    state.bathrooms = n;
+    document.querySelectorAll('#bathroom-count-buttons .select-btn').forEach(b => {
+        b.classList.toggle('selected', b.textContent.includes(n));
     });
+}
 
+function selectBathroomType(type) {
+    state.bathroomType = type;
+    document.getElementById('type-combined').classList.toggle('selected', type === 'combined');
+    document.getElementById('type-separate').classList.toggle('selected', type === 'separate');
     setTimeout(() => {
-        showStep('step-colors');
+        if (type === 'separate') showStep('step-shower');
+        else showStep('step-colors');
     }, 300);
 }
 
-// Step 4: Colors Init
-function initColorButtons() {
-    colorsContainer.innerHTML = colorsPalette.map((c, index) => `
-        <div class="color-item" 
-             style="background-color: ${c.hex}; ${c.hex==='#FFFFFF' ? 'border-color:#ccc;' : ''}"
-             data-index="${index}"
-             title="${c.name}"
-             onclick="toggleColor(${index})">
-        </div>
-    `).join('');
+function selectShowerCount(n) {
+    state.showers = n;
+    document.querySelectorAll('#shower-count-buttons .select-btn').forEach(b => {
+        b.classList.toggle('selected', b.textContent.includes(n));
+    });
+    setTimeout(() => showStep('step-colors'), 300);
 }
 
-function toggleColor(index) {
-    const el = colorsContainer.children[index];
-    const colorHex = colorsPalette[index].hex;
-    
-    if(state.selectedColors.includes(colorHex)) {
-        state.selectedColors = state.selectedColors.filter(c => c !== colorHex);
+function toggleColor(idx, el, hex) {
+    if (state.selectedColors.includes(hex)) {
+        state.selectedColors = state.selectedColors.filter(c => c !== hex);
         el.classList.remove('selected');
     } else {
-        if(state.selectedColors.length < 3) {
-            state.selectedColors.push(colorHex);
-            el.classList.add('selected');
-        } else {
-            // Shake effect if trying to select more than 3
-            el.style.transform = 'translateX(5px)';
-            setTimeout(() => el.style.transform = 'translateX(-5px)', 50);
-            setTimeout(() => el.style.transform = 'translateX(0)', 100);
+        if (state.selectedColors.length >= 3) {
+            el.style.transform = 'scale(0.85)';
+            setTimeout(() => el.style.transform = '', 200);
+            return;
         }
+        state.selectedColors.push(hex);
+        el.classList.add('selected');
     }
-    updateColorBtn();
+    document.getElementById('color-count').textContent = state.selectedColors.length;
+    updateColorsBtn();
 }
 
-function updateColorBtn() {
-    colorCountEl.textContent = state.selectedColors.length;
-    if(state.selectedColors.length === 3) {
-        generateColorsBtn.classList.remove('disabled');
-        generateColorsBtn.disabled = false;
-    } else {
-        generateColorsBtn.classList.add('disabled');
-        generateColorsBtn.disabled = true;
-    }
+function updateColorsBtn() {
+    const btn = document.getElementById('generate-colors-btn');
+    const ok = state.selectedColors.length === 3;
+    btn.disabled = !ok;
+    btn.classList.toggle('disabled', !ok);
 }
 
-// Instead of reshuffling randomly on every render, we prepare the shuffled array once per showResults
-let currentImagesList = [];
+// ==================== RESULTS ====================
+function getRoomTier() {
+    if (state.rooms <= 3) return 'small';
+    if (state.rooms <= 5) return 'medium';
+    return 'large';
+}
 
-function showResults(type) {
+function buildRoomList() {
+    const names = ['Mehmonxona', 'Yotoqxona', 'Oshxona', 'Bolalar xonasi', 'Balkon', 'Dahliz'];
+    let rooms = names.slice(0, state.rooms);
+    // Add bathrooms
+    for (let i = 0; i < state.bathrooms; i++) {
+        rooms.push(state.bathroomType === 'combined' ? 'Hojatxona' : 'Hojatxona');
+    }
+    // Add showers if separate
+    if (state.bathroomType === 'separate') {
+        for (let i = 0; i < state.showers; i++) rooms.push('Dush xonasi');
+    }
+    return rooms;
+}
+
+function showResults() {
     showStep('step-results');
     const loader = document.getElementById('results-loader');
     const gallery = document.getElementById('results-gallery');
-    const title = document.getElementById('results-title');
-    const subtitle = document.getElementById('results-subtitle');
-
     loader.classList.remove('hidden');
     gallery.classList.add('hidden');
-    state.currentBatch = 0; // reset batch
 
-    title.textContent = `Siz uchun maxsus loyihalar`;
-    
-    // Convert chosen color hexes to localized names for the subtitle
-    const selectedColorNames = state.selectedColors.map(hex => {
-        const c = colorsPalette.find(item => item.hex === hex);
-        return c ? c.name.split(' / ')[0] : hex;
-    }).join(', ');
-    
-    subtitle.textContent = `${state.rooms} xonali, tanlangan ranglar: ${selectedColorNames}`;
-    
-    // Step 1: Filter the catalog by room count compatibility
-    let pool = baseHousesCatalog.filter(h => h.rooms.includes(state.rooms));
-    if (pool.length === 0) pool = baseHousesCatalog; // Fallback
-    
-    // Step 2: Prioritize/Sort based on chosen color accents
-    let colorMatched = pool.filter(h => h.tags.some(tag => state.selectedColors.includes(tag)));
-    let nonColorMatched = pool.filter(h => !h.tags.some(tag => state.selectedColors.includes(tag)));
-    let orderedPool = [...colorMatched, ...nonColorMatched];
-    
-    // Step 3: Expand the customized pool to 100 entries so they get 100 perfectly styled items
-    currentImagesList = [];
-    for (let i = 0; i < 100; i++) {
-        const baseItem = orderedPool[i % orderedPool.length];
-        const base = baseItem.url;
-        const sep = base.includes('?') ? '&' : '?';
-        currentImagesList.push(`${base}${sep}auto=format&fit=crop&w=800&q=80&idx=${i}`);
-    }
+    const tier = getRoomTier();
+    const colorNames = state.selectedColors.map(h => {
+        const c = colorsPalette.find(x => x.hex === h);
+        return `<span class="color-swatch-mini" style="background:${h}; ${h==='#FFFFFF'?'border:1px solid #ccc':''}"></span>`;
+    }).join('');
 
-    // Simulate API Call
+    const bathInfo = state.bathroomType === 'combined'
+        ? `${state.bathrooms} ta (WC+Dush birgalikda)`
+        : `${state.bathrooms} ta WC + ${state.showers} ta Dush (alohida)`;
+
+    document.getElementById('results-title').textContent = `${state.rooms} xonali uy — 3 ta loyiha`;
+    document.getElementById('results-subtitle').textContent = `Hojatxona: ${bathInfo}`;
+
     setTimeout(() => {
         loader.classList.add('hidden');
         gallery.classList.remove('hidden');
-        renderImages();
-    }, 1200);
-}
 
-function nextBatch() {
-    state.currentBatch++;
-    const gallery = document.getElementById('results-gallery');
-    gallery.style.opacity = 0;
-    setTimeout(() => {
-        renderImages();
-        gallery.style.opacity = 1;
-    }, 300);
-}
-
-function renderImages() {
-    const gallery = document.getElementById('results-gallery');
-    
-    const totalBatches = Math.ceil(currentImagesList.length / 10);
-    const batchIdx = state.currentBatch % totalBatches;
-    const startIdx = batchIdx * 10;
-    const imagesToShow = currentImagesList.slice(startIdx, startIdx + 10);
-    
-    const selectedColorNames = state.selectedColors.map(hex => {
-        const c = colorsPalette.find(item => item.hex === hex);
-        return c ? c.name.split(' / ')[0] : hex;
-    }).join(', ');
-
-    const roomNamesArr = ['Mehmonxona', 'Yotoqxona', 'Oshxona', 'Dush', 'Dahliz', 'Bolalar xonasi', 'Balkon'];
-    const selectedRooms = roomNamesArr.slice(0, state.rooms).join(', ');
-
-    const luxTitles = [
-        "Premium Modern Villa", "Hi-Tech Glass Mansion", "Minimalist Eco-Residence",
-        "Neoclassical Royal House", "Smart Concept Penthouse", "Scandinavian Cozy Studio",
-        "Contemporary Luxury Oasis", "Futuristic Cubic Villa", "Eco-Smart Modular House",
-        "Urban Deluxe Cottage"
-    ];
-    const luxSubtitles = [
-        "Yuqori texnologiyali hashamatli dizayn", "Ultra-zamonaviy shaffof fasad", "Tabiiy materiallar va minimalizm",
-        "Klassik hashamat va simmetriya", "Aqlli boshqaruv va panoramik darchalar", "Tabiiy yorug'lik va iliq muhit",
-        "Yashil hudud va basseynli hovli", "Geometrik shakllar va futurizm", "Energiya tejamkor modulli arxitektura",
-        "Shahar chetidagi qulay va zamonaviy dacha"
-    ];
-
-    const featuresPool = [
-        { name: "Aqlli uy", icon: "fa-cpu" },
-        { name: "Basseyn", icon: "fa-water", class: "success" },
-        { name: "Issiq pol", icon: "fa-fire", class: "secondary" },
-        { name: "Panorama oyna", icon: "fa-mountain-sun" },
-        { name: "Terassa", icon: "fa-tree", class: "success" },
-        { name: "Avtoturargoh", icon: "fa-car", class: "secondary" },
-        { name: "Ekologik material", icon: "fa-leaf" }
-    ];
-    
-    gallery.innerHTML = imagesToShow.map((img, i) => {
-        const matchScore = 95 + Math.floor(Math.random() * 5); // 95% to 99%
-        const designIdx = (startIdx + i) % luxTitles.length;
-        const title = luxTitles[designIdx];
-        const subtitle = luxSubtitles[designIdx];
-
-        // Deterministic area calculation based on rooms and index
-        const estimatedArea = state.rooms * 18 + ((startIdx + i) % 7);
-
-        // Select 3 unique features based on index and parameters
-        const features = [];
-        features.push(featuresPool[0]); // Smart home is always included
-        features.push(featuresPool[(startIdx + i + 1) % featuresPool.length]);
-        if (estimatedArea > 60) {
-            features.push(featuresPool[1]); // Pool for larger area
-        } else {
-            features.push(featuresPool[2]); // Heated floors
-        }
-
-        const featuresHTML = features.map(f => `
-            <span class="feature-pill ${f.class || ''}">
-                <i class="fa-solid ${f.icon}"></i> ${f.name}
-            </span>
-        `).join('');
-        
-        return `
-            <div class="result-card" onclick="openModal('${img}', ${startIdx + i + 1})">
-                <div class="match-badge"><i class="fa-solid fa-circle-notch fa-spin"></i> AI Match: ${matchScore}%</div>
-                <img src="${img}" alt="Design ${startIdx + i + 1}" loading="lazy">
-                <div class="result-info">
-                    <div class="result-header">
-                        <span class="result-subtitle-style">${subtitle}</span>
-                        <h3>${state.rooms} xonali ${title} #${startIdx + i + 1}</h3>
-                    </div>
-                    
-                    <div class="result-meta-grid">
-                        <div class="meta-item">
-                            <i class="fa-solid fa-ruler-combined"></i>
-                            <span>Maydoni: <strong>~${estimatedArea} kv.m</strong></span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fa-solid fa-door-open"></i>
-                            <span>Xonalar: <strong>${state.rooms} xona</strong></span>
-                        </div>
-                        <div class="meta-item" style="grid-column: span 2;">
-                            <i class="fa-solid fa-bed"></i>
-                            <span>Xonalar ro'yxati: <strong>${selectedRooms}</strong></span>
-                        </div>
-                        <div class="meta-item" style="grid-column: span 2;">
-                            <i class="fa-solid fa-palette"></i>
-                            <span>Accents: <strong>${selectedColorNames}</strong></span>
-                        </div>
-                    </div>
-
-                    <div class="result-features-list">
-                        ${featuresHTML}
-                    </div>
-
-                    <div class="result-footer">
-                        <span class="view-btn"><i class="fa-solid fa-eye"></i> Xonalarni ko'rish</span>
-                        <span class="verified-tag"><i class="fa-solid fa-circle-check"></i> VIP Premium</span>
-                    </div>
+        gallery.innerHTML = houseStyles.map((style, si) => {
+            const imgUrl = style.exteriors[tier] + '?auto=format&fit=crop&w=800&q=80';
+            const colorDots = state.selectedColors.map(h =>
+                `<span class="color-dot-sm" style="background:${h}; ${h==='#FFFFFF'?'border:1px solid #ccc':''}"></span>`
+            ).join('');
+            return `
+            <div class="result-house-card" style="--accent: ${state.selectedColors[si % state.selectedColors.length]}">
+                <div class="result-card-img-wrap">
+                    <img src="${imgUrl}" alt="${style.labelUz}" loading="lazy">
+                    <div class="result-card-style-badge">${style.badge}</div>
+                    <div class="result-card-color-overlay" style="background:${state.selectedColors[si%state.selectedColors.length]}; opacity:0.15; mix-blend-mode:color;"></div>
                 </div>
-            </div>
-        `;
-    }).join('');
+                <div class="result-card-body">
+                    <div class="result-card-top">
+                        <i class="fa-solid ${style.icon}" style="color:var(--primary)"></i>
+                        <h3>${style.labelUz}</h3>
+                        <p class="result-card-desc">${style.desc}</p>
+                    </div>
+                    <div class="result-card-meta">
+                        <div class="meta-row"><i class="fa-solid fa-door-open"></i><span>${state.rooms} xona</span></div>
+                        <div class="meta-row"><i class="fa-solid fa-toilet"></i><span>${bathInfo}</span></div>
+                        <div class="meta-row"><i class="fa-solid fa-palette"></i><span>${colorDots}</span></div>
+                    </div>
+                    <button class="view-house-btn" onclick="openHouseModal(${si})">
+                        <i class="fa-solid fa-eye"></i> Uyni ko'rish
+                    </button>
+                </div>
+            </div>`;
+        }).join('');
+    }, 1500);
 }
 
-// Modal Functions
-const modal = document.getElementById('image-modal');
-const modalGallery = document.getElementById('modal-gallery');
-const captionText = document.getElementById('modal-caption');
-
-function openModal(src, id) {
+// ==================== HOUSE MODAL ====================
+function openHouseModal(styleIndex) {
+    const style = houseStyles[styleIndex];
+    const tier = getRoomTier();
+    const floorPlan = style.floorPlans[tier];
+    const roomList = buildRoomList();
+    const modal = document.getElementById('house-modal');
     modal.classList.remove('hidden');
-    captionText.innerHTML = `Loyiha #${id} - Ichki Xonalar`;
-    
-    const roomNamesArr = ['Mehmonxona', 'Yotoqxona', 'Oshxona', 'Bolalar xonasi', 'Balkon', 'Dahliz', 'Dush'];
-    let modalHTML = '';
-    
-    for (let i = 0; i < state.rooms; i++) {
-        // Determine the room name (e.g. Mehmonxona, Yotoqxona, etc.)
-        const roomName = roomNamesArr[i % roomNamesArr.length];
-        
-        // Cycle through selected colors dynamically
-        const assignedColorHex = state.selectedColors[i % state.selectedColors.length];
-        const assignedColorObj = colorsPalette.find(c => c.hex === assignedColorHex) || { name: 'Maxsus', hex: assignedColorHex };
-        const colorNameUz = assignedColorObj.name.split(' / ')[0];
-        
-        // Get the pool for this specific room type
-        const pool = roomCatalog[roomName] || [];
-        
-        // Find matching tagged room images inside the pool
-        let matched = pool.filter(room => room.tags.includes(assignedColorHex));
-        if (matched.length === 0) {
-            matched = pool.filter(room => room.tags.some(tag => state.selectedColors.includes(tag)));
-        }
-        if (matched.length === 0) {
-            matched = pool;
-        }
-        
-        // Incorporate project ID to guarantee different projects display entirely unique interior images
-        const uniqueSelectionIdx = (i + id) % matched.length;
-        const roomImgUrl = matched[uniqueSelectionIdx].url + "?auto=format&fit=crop&w=600&q=80";
-        
-        // Apply elegant custom border and shadow glow matching the selected accent color hex dynamically
-        modalHTML += `
-            <div class="modal-room-card" style="border: 2px solid ${assignedColorHex}40; box-shadow: 0 10px 25px ${assignedColorHex}15; transition: all 0.3s ease; border-radius: 18px; overflow: hidden; background: rgba(30, 41, 59, 0.4); display: flex; flex-direction: column;">
-                <div class="room-img-container" style="position: relative; overflow: hidden; height: 210px; width: 100%;">
-                    <img src="${roomImgUrl}" alt="${roomName}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;">
-                    <!-- Real-time blend overlays that physically adapt the room details to match the chosen accent color -->
-                    <div class="color-tint-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: ${assignedColorHex}; opacity: 0.22; mix-blend-mode: color; pointer-events: none;"></div>
-                    <div class="color-glow-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: ${assignedColorHex}; opacity: 0.08; mix-blend-mode: overlay; pointer-events: none;"></div>
-                    <div class="gradient-fade-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 60%, rgba(15, 23, 42, 0.85)); pointer-events: none;"></div>
-                </div>
-                <div class="modal-room-details" style="border-top: 1px solid ${assignedColorHex}30; padding: 1.2rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
-                    <h4 style="font-size: 1.25rem; margin-bottom: 0.6rem; color: #fff;">${roomName}</h4>
-                    <div>
-                        <div class="color-badge-pill" style="background: ${assignedColorHex}15; border: 1px solid ${assignedColorHex}40; display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.8rem; border-radius: 20px;">
-                            <span class="color-dot" style="background-color: ${assignedColorHex}; ${assignedColorHex==='#FFFFFF' ? 'border: 1px solid #ccc;' : ''} width: 10px; height: 10px; border-radius: 50%;"></span>
-                            <span style="color: ${assignedColorHex==='#FFFFFF' ? '#fff' : assignedColorHex}; font-weight: 600; font-size: 0.85rem;">${colorNameUz} uslubi</span>
-                        </div>
-                    </div>
+
+    let roomsHTML = roomList.map((roomName, i) => {
+        const colorHex = state.selectedColors[i % state.selectedColors.length];
+        const colorObj = colorsPalette.find(c => c.hex === colorHex) || { name: 'Maxsus', hex: colorHex };
+        const colorNameUz = colorObj.name.split(' / ')[0];
+        const pool = roomCatalog[roomName] || roomCatalog['Dahliz'];
+        let matched = pool.filter(r => r.tags.includes(colorHex));
+        if (!matched.length) matched = pool.filter(r => r.tags.some(t => state.selectedColors.includes(t)));
+        if (!matched.length) matched = pool;
+        const imgUrl = matched[(i + styleIndex) % matched.length].url + '?auto=format&fit=crop&w=600&q=80';
+        return `
+        <div class="modal-room-card" style="border:2px solid ${colorHex}40; box-shadow:0 8px 24px ${colorHex}20; border-radius:16px; overflow:hidden;">
+            <div style="position:relative; height:180px; overflow:hidden;">
+                <img src="${imgUrl}" alt="${roomName}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
+                <div style="position:absolute;inset:0;background:${colorHex};opacity:0.2;mix-blend-mode:color;pointer-events:none;"></div>
+                <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 55%,rgba(15,23,42,0.85));pointer-events:none;"></div>
+                <div style="position:absolute;bottom:8px;left:10px;font-weight:700;color:#fff;font-size:0.95rem;text-shadow:0 1px 4px #000a">${roomName}</div>
+            </div>
+            <div style="padding:0.8rem 1rem;background:rgba(15,23,42,0.6);">
+                <div style="display:inline-flex;align-items:center;gap:0.5rem;background:${colorHex}15;border:1px solid ${colorHex}40;padding:0.3rem 0.7rem;border-radius:20px;">
+                    <span style="width:10px;height:10px;border-radius:50%;background:${colorHex};${colorHex==='#FFFFFF'?'border:1px solid #ccc':''}; display:inline-block;"></span>
+                    <span style="color:${colorHex==='#FFFFFF'?'#fff':colorHex};font-size:0.8rem;font-weight:600;">${colorNameUz} uslubi</span>
                 </div>
             </div>
-        `;
-    }
-    
-    modalGallery.innerHTML = modalHTML;
+        </div>`;
+    }).join('');
+
+    document.getElementById('house-modal-inner').innerHTML = `
+        <h2 style="color:#fff;font-size:1.8rem;margin-bottom:0.5rem;">${style.labelUz} — Loyiha</h2>
+        <p style="color:#94a3b8;margin-bottom:1.5rem;">${state.rooms} xona · ${style.desc}</p>
+
+        <div class="modal-floor-plan-section">
+            <h3 style="color:var(--primary);margin-bottom:1rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+                <i class="fa-solid fa-drafting-compass"></i> Chizma (3D rejasi)
+            </h3>
+            <div class="floor-plan-hero">
+                <img src="${floorPlan}" alt="Chizma" style="width:100%;border-radius:16px;border:1px solid rgba(255,255,255,0.1);">
+            </div>
+        </div>
+
+        <div class="modal-rooms-section">
+            <h3 style="color:var(--primary);margin:1.5rem 0 1rem;font-size:1.1rem;display:flex;align-items:center;gap:0.5rem;">
+                <i class="fa-solid fa-layer-group"></i> Xonalar (${roomList.length} ta)
+            </h3>
+            <div class="modal-gallery">${roomsHTML}</div>
+        </div>
+    `;
 }
 
-function closeModal() {
-    modal.classList.add('hidden');
+function closeHouseModal() {
+    document.getElementById('house-modal').classList.add('hidden');
 }
 
-// Temporary filter state for the popup modal
-let filterState = {
-    rooms: null,
-    selectedColors: []
-};
+// ==================== FILTER MODAL ====================
+let filterState = { rooms: null, selectedColors: [] };
 
 function openFilterModal() {
-    const filterModal = document.getElementById('filter-modal');
-    filterModal.classList.remove('hidden');
-    
-    // Copy main state to temp filter state
     filterState.rooms = state.rooms;
     filterState.selectedColors = [...state.selectedColors];
-    
-    // Render room count selectors in filter modal
-    const filterRoomButtons = document.getElementById('filter-room-buttons');
-    let buttonsHTML = '';
-    for(let i = 2; i <= 7; i++) {
-        const isSelected = filterState.rooms === i ? 'selected' : '';
-        buttonsHTML += `<button class="select-btn ${isSelected}" onclick="selectFilterRoom(${i})">${i} xona</button>`;
+
+    const rb = document.getElementById('filter-room-buttons');
+    rb.innerHTML = '';
+    for (let i = 2; i <= 7; i++) {
+        rb.innerHTML += `<button class="select-btn ${filterState.rooms===i?'selected':''}" onclick="fSelectRoom(${i})">${i} xona</button>`;
     }
-    filterRoomButtons.innerHTML = buttonsHTML;
-    
-    // Render color items in filter modal
-    const filterColorsContainer = document.getElementById('filter-colors-container');
-    filterColorsContainer.innerHTML = colorsPalette.map((c, index) => {
-        const isSelected = filterState.selectedColors.includes(c.hex) ? 'selected' : '';
-        return `
-            <div class="color-item ${isSelected}" 
-                 style="background-color: ${c.hex}; ${c.hex==='#FFFFFF' ? 'border-color:#ccc;' : ''}"
-                 title="${c.name}"
-                 onclick="toggleFilterColor(${index})">
-            </div>
-        `;
-    }).join('');
-    
-    updateFilterApplyBtn();
+
+    const cc = document.getElementById('filter-colors-container');
+    cc.innerHTML = colorsPalette.map((c, i) => `
+        <div class="color-item ${filterState.selectedColors.includes(c.hex)?'selected':''}"
+            style="background:${c.hex};${c.hex==='#FFFFFF'?'border:2px solid #ccc':''}"
+            title="${c.name}" onclick="fToggleColor(${i})"></div>
+    `).join('');
+
+    updateFilterBtn();
+    document.getElementById('filter-modal').classList.remove('hidden');
 }
 
-function closeFilterModal() {
-    document.getElementById('filter-modal').classList.add('hidden');
-}
+function closeFilterModal() { document.getElementById('filter-modal').classList.add('hidden'); }
 
-function selectFilterRoom(val) {
-    filterState.rooms = val;
-    const filterRoomButtons = document.getElementById('filter-room-buttons');
-    Array.from(filterRoomButtons.children).forEach(btn => {
-        btn.classList.remove('selected');
-        if(btn.textContent.includes(val)) btn.classList.add('selected');
+function fSelectRoom(n) {
+    filterState.rooms = n;
+    document.querySelectorAll('#filter-room-buttons .select-btn').forEach(b => {
+        b.classList.toggle('selected', b.textContent.includes(n));
     });
 }
 
-function toggleFilterColor(index) {
-    const colorHex = colorsPalette[index].hex;
-    const el = document.getElementById('filter-colors-container').children[index];
-    
-    if(filterState.selectedColors.includes(colorHex)) {
-        filterState.selectedColors = filterState.selectedColors.filter(c => c !== colorHex);
+function fToggleColor(idx) {
+    const hex = colorsPalette[idx].hex;
+    const el = document.getElementById('filter-colors-container').children[idx];
+    if (filterState.selectedColors.includes(hex)) {
+        filterState.selectedColors = filterState.selectedColors.filter(c => c !== hex);
         el.classList.remove('selected');
-    } else {
-        if(filterState.selectedColors.length < 3) {
-            filterState.selectedColors.push(colorHex);
-            el.classList.add('selected');
-        } else {
-            // Shake effect if trying to select more than 3
-            el.style.transform = 'translateX(5px)';
-            setTimeout(() => el.style.transform = 'translateX(-5px)', 50);
-            setTimeout(() => el.style.transform = 'translateX(0)', 100);
-        }
+    } else if (filterState.selectedColors.length < 3) {
+        filterState.selectedColors.push(hex);
+        el.classList.add('selected');
     }
-    updateFilterApplyBtn();
+    updateFilterBtn();
 }
 
-function updateFilterApplyBtn() {
-    const applyBtn = document.getElementById('apply-filter-btn');
-    if(filterState.selectedColors.length === 3) {
-        applyBtn.classList.remove('disabled');
-        applyBtn.disabled = false;
-    } else {
-        applyBtn.classList.add('disabled');
-        applyBtn.disabled = true;
-    }
+function updateFilterBtn() {
+    const btn = document.getElementById('apply-filter-btn');
+    const ok = filterState.selectedColors.length === 3 && filterState.rooms;
+    btn.disabled = !ok;
+    btn.classList.toggle('disabled', !ok);
 }
 
 function applyFilters() {
-    // Copy temp state to main state
     state.rooms = filterState.rooms;
     state.selectedColors = [...filterState.selectedColors];
-    
-    // Sync the wizard selection UI states so they match in background
-    // 1. Sync rooms selection button highlights
-    Array.from(roomButtonsContainer.children).forEach(btn => {
-        btn.classList.remove('selected');
-        if(btn.textContent.includes(state.rooms)) btn.classList.add('selected');
-    });
-    
-    // 2. Sync color items selection highlights
-    colorsPalette.forEach((c, index) => {
-        const el = colorsContainer.children[index];
-        if (el) {
-            if (state.selectedColors.includes(c.hex)) {
-                el.classList.add('selected');
-            } else {
-                el.classList.remove('selected');
-            }
-        }
-    });
-    updateColorBtn();
-    
-    // Close filter modal
     closeFilterModal();
-    
-    // Dynamic refresh in place
-    showResults('unified');
+    showResults();
+}
+
+function toggleQR() {
+    document.getElementById('qr-popup').classList.toggle('hidden');
 }
